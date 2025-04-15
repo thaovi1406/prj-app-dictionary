@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TranslateTextActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutVietnamese"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/background_group_translate"
+        android:layout_margin="10dp"
+        android:paddingBottom="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:id="@+id/groupV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="8dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="8dp">
+
+            <!-- TextView "Việt" -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="Việt"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <!-- Icon loa -->
+            <ImageButton
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="7dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:contentDescription="Speak"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/speaker_tran" />
+        </LinearLayout>
+
+        <!-- ConstraintLayout để chứa EditText và icon X -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="6dp">
+
+            <EditText
+                android:id="@+id/editEnterText"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:background="@drawable/bg_editext"
+                android:hint="Hãy nhập gì đó..."
+                android:padding="12dp"
+                android:paddingEnd="40dp"
+                android:paddingTop="20dp"
+                android:gravity="start"
+                android:textColor="#000000"
+                />
+
+            <!-- Icon X -->
+            <ImageButton
+                android:id="@+id/buttonClearVietnamese"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:background="@null"
+                android:contentDescription="Clear"
+                android:scaleType="centerInside"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                app:layout_constraintEnd_toEndOf="@id/editEnterText"
+                app:layout_constraintTop_toTopOf="@id/editEnterText" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+    <!-- LinearLayout chứa buttonSwap và buttonPlay mới -->
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@id/linearLayoutVietnamese"
+        app:layout_constraintBottom_toTopOf="@id/linearLayoutEnglish"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Language Swap Button -->
+        <ImageButton
+            android:id="@+id/buttonSwap"
+            android:layout_width="59dp"
+            android:layout_height="48dp"
+            android:contentDescription="Swap Languages"
+            android:background="@null"
+            android:scaleType="centerInside"
+            android:src="@drawable/swap" />
+
+        <ImageButton
+            android:id="@+id/buttonPlayTrans"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="50dp"
+            android:background="@null"
+            android:contentDescription="Play"
+            android:scaleType="centerInside"
+            android:src="@drawable/play" />
+    </LinearLayout>
+
+    <!-- English Input Section -->
+    <LinearLayout
+        android:id="@+id/linearLayoutEnglish"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/background_group_translate"
+        android:layout_margin="10dp"
+        android:paddingBottom="8dp"
+        app:layout_constraintTop_toBottomOf="@id/buttonContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- LinearLayout để chứa TextView và ImageView cho icon loa -->
+        <LinearLayout
+            android:id="@+id/groupE"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="8dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="8dp">
+
+            <!-- TextView "Anh" -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="Anh"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <!-- Icon loa -->
+            <ImageButton
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="7dp"
+                android:background="@null"
+                android:contentDescription="Speak"
+                android:layout_gravity="center_vertical"
+                android:scaleType="fitCenter"
+                android:src="@drawable/speaker_tran" />
+        </LinearLayout>
+
+        <!-- ConstraintLayout để chứa EditText và icon X -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="6dp">
+            <TextView
+                android:id="@+id/textTranslated"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:background="@drawable/bg_editext"
+                android:padding="12dp"
+                android:paddingEnd="40dp"
+                android:paddingTop="20dp"
+                android:textColor="#000000"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/linearLayoutEnglish"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewOriginal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Người dùng đã..."
+                android:textColor="@android:color/black"
+                android:textSize="20sp" />
+
+            <!-- TextView cho nội dung dịch -->
+            <TextView
+                android:id="@+id/textViewTranslated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Yesterday, what are you..."
+                android:textColor="@android:color/black"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <!-- Các nút Action: Delete và Play -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginStart="16dp">
+
+            <ImageButton
+                android:id="@+id/buttonDelete"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="8dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Delete"
+                android:scaleType="centerInside"
+                android:src="@drawable/trash_bin" />
+
+            <ImageButton
+                android:id="@+id/buttonPlay"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="8dp"
+                android:layout_marginStart="14dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Play"
+                android:scaleType="centerInside"
+                android:src="@drawable/play" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
