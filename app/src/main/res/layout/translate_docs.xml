@@ -71,8 +71,9 @@
                 android:paddingEnd="40dp"
                 android:paddingTop="20dp"
                 android:gravity="start"
+                android:textSize="20sp"
                 android:textColor="#000000"
-                />
+                tools:ignore="MissingConstraints" />
 
             <!-- Icon X -->
             <ImageButton
@@ -111,7 +112,6 @@
             android:background="@null"
             android:scaleType="centerInside"
             android:src="@drawable/swap" />
-
         <ImageButton
             android:id="@+id/buttonPlayTrans"
             android:layout_width="48dp"
@@ -187,7 +187,8 @@
                 android:paddingEnd="40dp"
                 android:paddingTop="20dp"
                 android:textColor="#000000"
-                />
+                android:textSize="20sp"
+                tools:ignore="MissingConstraints" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

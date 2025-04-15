@@ -19,7 +19,7 @@ import com.google.mlkit.nl.translate.Translator;
 import com.google.mlkit.nl.translate.TranslatorOptions;
 
 public class TranslateTextActivity extends AppCompatActivity {
-    private Translator Translate_from_English_to_Vietnamese;
+    private Translator Translate_from_Vietnamese_to_English;
     private boolean boolean_download_language_translation_model = false;
     private EditText edittext_enter_text;
     private TextView textView_translated;
@@ -36,11 +36,11 @@ public class TranslateTextActivity extends AppCompatActivity {
         // Create a translation configuration from English to Vietnamese
         TranslatorOptions options =
                 new TranslatorOptions.Builder()
-                        .setSourceLanguage(TranslateLanguage.ENGLISH)
-                        .setTargetLanguage(TranslateLanguage.VIETNAMESE)
+                        .setSourceLanguage(TranslateLanguage.VIETNAMESE)
+                        .setTargetLanguage(TranslateLanguage.ENGLISH)
                         .build();
 
-        Translate_from_English_to_Vietnamese =
+        Translate_from_Vietnamese_to_English =
                 Translation.getClient(options);
 
         Download_language_translation_model();
@@ -68,7 +68,7 @@ public class TranslateTextActivity extends AppCompatActivity {
         DownloadConditions conditions = new DownloadConditions.Builder()
                 .requireWifi()
                 .build();
-        Translate_from_English_to_Vietnamese.downloadModelIfNeeded(conditions)
+        Translate_from_Vietnamese_to_English.downloadModelIfNeeded(conditions)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void v) {
@@ -85,7 +85,7 @@ public class TranslateTextActivity extends AppCompatActivity {
                         });
     }
     private void Language_translation(String van_ban){
-        Translate_from_English_to_Vietnamese.translate(van_ban)
+        Translate_from_Vietnamese_to_English.translate(van_ban)
                 .addOnSuccessListener(new OnSuccessListener<String>() {
                     @Override
                     public void onSuccess(String s) {
