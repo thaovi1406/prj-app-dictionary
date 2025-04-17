@@ -1,6 +1,7 @@
 package com.example.app_dictionary_ev;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -12,11 +13,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.mlkit.common.model.DownloadConditions;
 import com.google.mlkit.nl.translate.TranslateLanguage;
 import com.google.mlkit.nl.translate.Translation;
 import com.google.mlkit.nl.translate.Translator;
 import com.google.mlkit.nl.translate.TranslatorOptions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TranslateTextActivity extends AppCompatActivity {
     private Translator Translate_from_Vietnamese_to_English;
@@ -29,12 +34,12 @@ public class TranslateTextActivity extends AppCompatActivity {
 
     private ImageButton button_clear;
     private boolean isVietnameseToEnglish = true;
-
+    private FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.translate_docs);
-
+        db = FirebaseFirestore.getInstance();
         edittext_enter_text = findViewById(R.id.editEnterText);
         textView_translated = findViewById(R.id.textTranslated);
         button_language_translation = findViewById(R.id.buttonPlayTrans);
@@ -140,22 +145,32 @@ public class TranslateTextActivity extends AppCompatActivity {
                             }
                         });
     }
-    private void Language_translation(String van_ban){
+    private void Language_translation(String van_ban) {
+        String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+
         Translate_from_Vietnamese_to_English.translate(van_ban)
-                .addOnSuccessListener(new OnSuccessListener<String>() {
-                    @Override
-                    public void onSuccess(String s) {
-                        //Text translated successfully
-                        textView_translated.setText(s);
-                    }
+                .addOnSuccessListener(translatedText -> {
+                    textView_translated.setText(translatedText);
+
+                    Map<String, Object> history = new HashMap<>();
+                    history.put("deviceId", deviceId); // Thêm deviceId
+                    history.put("inputText", van_ban);
+                    history.put("translatedText", translatedText);
+                    history.put("sourceLanguage", isVietnameseToEnglish ? "Việt" : "Anh");
+                    history.put("targetLanguage", isVietnameseToEnglish ? "Anh" : "Việt");
+                    history.put("timestamp", com.google.firebase.Timestamp.now());
+
+                    db.collection("translation_history")
+                            .add(history)
+                            .addOnSuccessListener(documentReference -> {
+                                Toast.makeText(TranslateTextActivity.this, "Lịch sử đã được lưu!", Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(TranslateTextActivity.this, "Lỗi khi lưu lịch sử: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
                 })
-                .addOnFailureListener(
-                        new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                //Error cannot translate text
-                                // ...
-                            }
-                        });
+                .addOnFailureListener(e -> {
+                    Toast.makeText(TranslateTextActivity.this, "Lỗi dịch: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 }
