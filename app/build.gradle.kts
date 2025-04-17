@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.application)
-    id("com.android.application")
     id("com.google.gms.google-services")
 }
 
@@ -42,6 +41,8 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.translate)
     testImplementation(libs.junit)
+    testImplementation(libs.firebase)
+    testImplementation(libs.firebasetranslate)
     implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
     implementation("com.google.firebase:firebase-analytics")
     androidTestImplementation(libs.ext.junit)
