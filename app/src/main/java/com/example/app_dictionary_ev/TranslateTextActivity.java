@@ -82,7 +82,6 @@ public class TranslateTextActivity extends AppCompatActivity {
                     Toast.makeText(TranslateTextActivity.this, "Dịch từ Tiếng Việt sang Tiếng Anh", Toast.LENGTH_SHORT).show();
                     title_Enter.setText("Việt");
                     title_Translated.setText("Anh");
-
                 } else {
                     Toast.makeText(TranslateTextActivity.this, "Dịch từ Tiếng Anh sang Tiếng Việt", Toast.LENGTH_SHORT).show();
                     title_Enter.setText("Anh");
@@ -105,7 +104,6 @@ public class TranslateTextActivity extends AppCompatActivity {
     }
     private void updateTranslator() {
         TranslatorOptions options;
-
         if (isVietnameseToEnglish) {
             options = new TranslatorOptions.Builder()
                     .setSourceLanguage(TranslateLanguage.VIETNAMESE)
