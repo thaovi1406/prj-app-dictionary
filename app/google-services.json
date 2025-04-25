@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "132837239182",
+    "firebase_url": "https://app-dictionary-ev-default-rtdb.firebaseio.com",
     "project_id": "app-dictionary-ev",
     "storage_bucket": "app-dictionary-ev.firebasestorage.app"
   },

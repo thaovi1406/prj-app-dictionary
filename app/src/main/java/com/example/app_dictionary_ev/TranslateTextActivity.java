@@ -146,6 +146,10 @@ public class TranslateTextActivity extends AppCompatActivity {
                         });
     }
     private void Language_translation(String van_ban) {
+        if (van_ban.isEmpty()) {
+            Toast.makeText(TranslateTextActivity.this, "Vui lòng nhập văn bản để dịch", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
         Translate_from_Vietnamese_to_English.translate(van_ban)

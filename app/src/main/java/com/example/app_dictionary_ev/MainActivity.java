@@ -20,11 +20,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
 
         CardView cardViewHistory = findViewById(R.id.cardView_History);
         cardViewHistory.setOnClickListener(v -> {
@@ -34,6 +30,17 @@ public class MainActivity extends AppCompatActivity {
         CardView cardViewTranslate = findViewById(R.id.cardView_Docs);
         cardViewTranslate.setOnClickListener(v -> {
             Intent intent = new Intent(this, TranslateTextActivity.class);
+            startActivity(intent);
+        });
+
+        CardView cardViewSetting = findViewById(R.id.cardView_Settings);
+        cardViewSetting.setOnClickListener(v -> {
+            Intent intent = new Intent(this, SettingActivity.class);
+            startActivity(intent);
+        });
+        CardView cardViewFavourite = findViewById(R.id.cardView_Favourite);
+        cardViewFavourite.setOnClickListener(v -> {
+            Intent intent = new Intent(this, FavoriteActivity.class);
             startActivity(intent);
         });
     }
