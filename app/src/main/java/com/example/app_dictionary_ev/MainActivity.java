@@ -6,9 +6,6 @@ import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.FirebaseApp;
 
@@ -35,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         CardView cardViewSetting = findViewById(R.id.cardView_Settings);
         cardViewSetting.setOnClickListener(v -> {
-            Intent intent = new Intent(this, SettingActivity.class);
+            Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         });
         CardView cardViewFavourite = findViewById(R.id.cardView_Favourite);
