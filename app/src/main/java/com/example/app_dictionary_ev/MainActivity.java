@@ -33,6 +33,16 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, TranslateTextActivity.class);
             startActivity(intent);
         });
+        CardView cardViewSettings = findViewById(R.id.cardView_Settings);
+        cardViewSettings.setOnClickListener(v -> {
+            Intent intent = new Intent(this, SettingActivity.class);
+            startActivity(intent);
+        });
+        CardView cardViewFavourite = findViewById(R.id.cardView_Favourite);
+        cardViewFavourite.setOnClickListener(v -> {
+            Intent intent = new Intent(this, FavoriteActivity.class);
+            startActivity(intent);
+        });
     }
 
 
