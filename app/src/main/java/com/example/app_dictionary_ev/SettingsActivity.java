@@ -26,12 +26,11 @@ public class SettingsActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
-        switchAutoPlay = findViewById(R.id.switchAutoPlay);
 
+        switchAutoPlay = findViewById(R.id.switchAutoPlay);
         SharedPreferences prefs = getSharedPreferences("Settings", MODE_PRIVATE);
         boolean isAutoPlayEnabled = prefs.getBoolean("autoPlayEnabled", false);
         switchAutoPlay.setChecked(isAutoPlayEnabled);
-
         switchAutoPlay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
