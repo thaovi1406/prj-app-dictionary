@@ -18,8 +18,13 @@ public class FavoriteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Đặt layout cho activity trước khi gọi findViewById
+        setContentView(R.layout.favourite_activity);
+
+        // Bây giờ có thể tìm view được
         RecyclerView recyclerView = findViewById(R.id.rvVocab);
 
+        // Tạo dữ liệu ví dụ
         List<VocabHisModal> favoriteItems = new ArrayList<>();
         favoriteItems.add(new VocabHisModal("Attention", "/əˈtenʃn/", "(v)", "sự chú ý"));
         favoriteItems.add(new VocabHisModal("Attract", "/əˈtrækt/", "(v)", "hút"));
@@ -29,10 +34,12 @@ public class FavoriteActivity extends AppCompatActivity {
         favoriteItems.add(new VocabHisModal("Desk", "/desk/", "(n)", "bàn"));
         favoriteItems.add(new VocabHisModal("Chair", "/tʃeə(r)/", "(n)", "ghế"));
 
+        // Thiết lập RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(new VocabAdapter(this, favoriteItems));
 
+        // Thiết lập sự kiện cho nút quay lại
         ImageButton btnBack = findViewById(R.id.btnHome);
         btnBack.setOnClickListener(v -> {
             Intent intent = new Intent(FavoriteActivity.this, MainActivity.class);
