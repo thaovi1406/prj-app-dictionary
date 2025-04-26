@@ -24,8 +24,6 @@
         <activity android:name=".HistoryActivity"/>
         <activity android:name=".ResultActivity"/>
         <activity android:name=".TranslateTextActivity"/>
-        <activity android:name=".SettingActivity"/>
-        <activity android:name=".FavoriteActivity" />
     </application>
 
 </manifest>

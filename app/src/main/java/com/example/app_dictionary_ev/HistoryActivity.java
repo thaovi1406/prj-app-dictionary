@@ -19,7 +19,7 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.history);
+        setContentView(R.layout.history_activity);
 
         RecyclerView recyclerView = findViewById(R.id.rvVocab);
 

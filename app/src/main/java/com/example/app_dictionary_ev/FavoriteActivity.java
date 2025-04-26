@@ -17,7 +17,6 @@ public class FavoriteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.history);
 
         RecyclerView recyclerView = findViewById(R.id.rvVocab);
 
@@ -34,7 +33,6 @@ public class FavoriteActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(new VocabAdapter(this, favoriteItems));
 
-        // Nút trở về trang chính
         ImageButton btnBack = findViewById(R.id.btnHome);
         btnBack.setOnClickListener(v -> {
             Intent intent = new Intent(FavoriteActivity.this, MainActivity.class);
