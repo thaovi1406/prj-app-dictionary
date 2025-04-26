@@ -25,7 +25,7 @@
         <activity android:name=".ResultActivity"/>
         <activity android:name=".TranslateTextActivity"/>
         <activity android:name=".FavoriteActivity"/>
-        <activity android:name=".SettingActivity"/>
+        <activity android:name=".SettingsActivity"/>
     </application>
 
 </manifest>
