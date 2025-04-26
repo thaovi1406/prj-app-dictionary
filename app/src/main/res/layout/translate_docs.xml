@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/backgroundapp"
     tools:context=".TranslateTextActivity">
 
     <LinearLayout
@@ -34,6 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
+                android:id="@+id/tEnter"
                 android:text="Việt"
                 android:layout_gravity="center"
                 android:textColor="@color/white"
@@ -77,10 +79,10 @@
 
             <!-- Icon X -->
             <ImageButton
-                android:id="@+id/buttonClearVietnamese"
+                android:id="@+id/buttonClear"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:padding="12dp"
+                android:padding="15dp"
                 android:background="@null"
                 android:contentDescription="Clear"
                 android:scaleType="centerInside"
@@ -108,6 +110,7 @@
             android:id="@+id/buttonSwap"
             android:layout_width="59dp"
             android:layout_height="48dp"
+            android:padding="5dp"
             android:contentDescription="Swap Languages"
             android:background="@null"
             android:scaleType="centerInside"
@@ -116,6 +119,7 @@
             android:id="@+id/buttonPlayTrans"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:padding="5dp"
             android:layout_marginStart="50dp"
             android:background="@null"
             android:contentDescription="Play"
@@ -153,6 +157,7 @@
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:text="Anh"
+                android:id="@+id/tTranslated"
                 android:layout_gravity="center"
                 android:textColor="@color/white"
                 android:textSize="20sp"
@@ -243,8 +248,8 @@
             <ImageButton
                 android:id="@+id/buttonDelete"
                 android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:padding="8dp"
+                android:layout_height="50dp"
+                android:padding="12dp"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Delete"
                 android:scaleType="centerInside"
@@ -254,7 +259,7 @@
                 android:id="@+id/buttonPlay"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:padding="8dp"
+                android:padding="10dp"
                 android:layout_marginStart="14dp"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Play"
