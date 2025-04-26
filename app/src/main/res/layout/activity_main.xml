@@ -41,28 +41,27 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView_History"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="12dp"
-                app:cardBackgroundColor="#388E3C"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
                 android:clickable="true"
                 android:foreground="?attr/selectableItemBackground"
-                app:layout_constraintWidth_percent="0.45"
-                app:layout_constraintHeight_percent="0.45"
+                app:layout_constraintTop_toBottomOf="@id/headerSearch"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                tools:ignore="NotSibling">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="24dp">
 
                     <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:src="@drawable/ic_history" />
 
                     <TextView
@@ -70,119 +69,110 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Từ đã tra"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp" />
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView_Favourite"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="12dp"
-                app:cardBackgroundColor="#D32F2F"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
                 android:clickable="true"
                 android:foreground="?attr/selectableItemBackground"
-                app:layout_constraintWidth_percent="0.45"
-                app:layout_constraintHeight_percent="0.45"
+                app:layout_constraintTop_toBottomOf="@id/cardView_History"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintStart_toStartOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="24dp"
+                    android:gravity="center">
 
                     <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:src="@drawable/ic_favorite" />
-
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_favorite"
+                        />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:text="Từ yêu thích"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp" />
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="8dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView_Docs"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="12dp"
-                app:cardBackgroundColor="#1976D2"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
                 android:clickable="true"
                 android:foreground="?attr/selectableItemBackground"
-                app:layout_constraintWidth_percent="0.45"
-                app:layout_constraintHeight_percent="0.45"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cardView_History">
+                app:layout_constraintTop_toBottomOf="@id/cardView_Favourite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="24dp"
+                    android:gravity="center">
 
                     <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:src="@drawable/ic_docs" />
-
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_docs"
+                        />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:text="Dịch văn bản"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp" />
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="8dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView_Settings"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="12dp"
-                app:cardBackgroundColor="#FBC02D"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
                 android:clickable="true"
                 android:foreground="?attr/selectableItemBackground"
-                app:layout_constraintWidth_percent="0.45"
-                app:layout_constraintHeight_percent="0.45"
+                app:layout_constraintTop_toBottomOf="@id/cardView_Docs"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cardView_Favourite">
+                app:layout_constraintStart_toStartOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="24dp"
+                    android:gravity="center">
 
                     <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:src="@drawable/ic_settings" />
-
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_settings"
+                        />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:text="Cài đặt"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp" />
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="8dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

@@ -38,9 +38,9 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabHisHolder> {
         holder.meaning.setText(items.get(position).getMeaning());
 
         if (position % 2 == 0) {
-            holder.itemView.setBackgroundColor(Color.parseColor("#E3F2FD")); // Màu xanh nhạt
+            holder.itemView.setBackgroundColor(Color.parseColor("#E3F2FD"));
         } else {
-            holder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF")); // Màu trắng
+            holder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
         holder.itemView.setOnClickListener(v -> {
             Context context = v.getContext();
