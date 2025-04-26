@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         });
         CardView cardViewSettings = findViewById(R.id.cardView_Settings);
         cardViewSettings.setOnClickListener(v -> {
-            Intent intent = new Intent(this, SettingActivity.class);
+            Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         });
         CardView cardViewFavourite = findViewById(R.id.cardView_Favourite);
