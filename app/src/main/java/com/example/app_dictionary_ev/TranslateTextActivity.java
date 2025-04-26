@@ -39,6 +39,10 @@ public class TranslateTextActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.translate_docs);
+
+        CustomHeader customHeader = findViewById(R.id.customHeader);
+        customHeader.setTitle("Dịch văn bản");
+
         db = FirebaseFirestore.getInstance();
         edittext_enter_text = findViewById(R.id.editEnterText);
         textView_translated = findViewById(R.id.textTranslated);

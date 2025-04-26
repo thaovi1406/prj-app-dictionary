@@ -21,6 +21,9 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.history_activity);
 
+        CustomHeader customHeader = findViewById(R.id.customHeader);
+        customHeader.setTitle("Lịch sử");
+
         RecyclerView recyclerView = findViewById(R.id.rvVocab);
 
         List<VocabHisModal> items = new ArrayList<VocabHisModal>();

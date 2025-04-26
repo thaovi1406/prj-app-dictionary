@@ -21,6 +21,9 @@ public class ResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_result);
 
+        CustomHeader customHeader = findViewById(R.id.customHeader);
+        customHeader.setTitle("");
+
         TextView tvWord = findViewById(R.id.tvWord);
         TextView tvPronounce = findViewById(R.id.tvPronounce);
         TextView tvPos = findViewById(R.id.tvPos);

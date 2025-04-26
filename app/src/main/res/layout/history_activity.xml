@@ -11,19 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <include
-        android:id="@+id/headerSearch"
-        layout="@layout/header_search"
+        android:id="@+id/searchBar"
+        layout="@layout/search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_below="@id/customHeader"/>
+        android:layout_below="@id/customHeader" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvVocab"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/headerSearch"
+        android:layout_below="@id/searchBar"
         tools:ignore="NotSibling" />
 
     <LinearLayout
