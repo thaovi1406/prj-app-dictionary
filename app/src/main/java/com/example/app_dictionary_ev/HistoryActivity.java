@@ -24,11 +24,11 @@ public class HistoryActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.rvVocab);
 
         List<VocabHisModal> items = new ArrayList<VocabHisModal>();
-        items.add(new VocabHisModal("barrack","/[ˈbærək]/", "(n)", "hét to để phản đối hoặc chế giễu, la ó"));
-        items.add(new VocabHisModal("attention","/[ˈbærək]/", "(n)", "hét to để phản đối hoặc chế giễu, la ó"));
-        items.add(new VocabHisModal("name","/[ˈbærək]/", "(n)", "hét to để phản đối hoặc chế giễu, la ó"));
-        items.add(new VocabHisModal("new","/[ˈbærək]/", "(n)", "hét to để phản đối hoặc chế giễu, la ó"));
-        items.add(new VocabHisModal("old","/[ˈbærək]/", "(n)", "hét to để phản đối hoặc chế giễu, la ó"));
+        items.add(new VocabHisModal("barrack","/[ˈbærək]/", "n", "hét to để phản đối hoặc chế giễu, la ó"));
+        items.add(new VocabHisModal("attention","/[ˈbærək]/", "n", "hét to để phản đối hoặc chế giễu, la ó"));
+        items.add(new VocabHisModal("name","/[ˈbærək]/", "n", "hét to để phản đối hoặc chế giễu, la ó"));
+        items.add(new VocabHisModal("new","/[ˈbærək]/", "n", "hét to để phản đối hoặc chế giễu, la ó"));
+        items.add(new VocabHisModal("old","/[ˈbærək]/", "n", "hét to để phản đối hoặc chế giễu, la ó"));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
