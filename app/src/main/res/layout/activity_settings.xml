@@ -5,11 +5,10 @@
     android:orientation="vertical"
     android:background="@drawable/backgroundapp">
 
-    <include
-        android:id="@+id/nav_bar_header"
-        layout="@layout/nav_bar_header"
+    <com.example.app_dictionary_ev.CustomHeader
+        android:id="@+id/customHeader"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -90,6 +89,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/restoredatabase"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginTop="12dp"
