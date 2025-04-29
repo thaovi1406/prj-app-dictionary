@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,10 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Locale;
 
 public class ResultActivity extends AppCompatActivity {
-
+    private DatabaseHelper dbHelper;
+    private boolean isFavorite = false;
     private TextToSpeech textToSpeech;
     private boolean isAutoPlayEnabled = false;
     private String word;
+    private ImageButton iHeart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,7 @@ public class ResultActivity extends AppCompatActivity {
         TextView tvPronounce = findViewById(R.id.tvPronounce);
         TextView tvPos = findViewById(R.id.tvPos);
         TextView tvMeaning = findViewById(R.id.tvMeaning);
+        iHeart = findViewById(R.id.iHeart);
 
         Intent intent = getIntent();
         word = intent.getStringExtra("word");
@@ -38,7 +42,7 @@ public class ResultActivity extends AppCompatActivity {
         tvWord.setText(word);
         tvPronounce.setText(pronounce);
         tvPos.setText(pos);
-        tvMeaning.setText("➜ " + meaning);
+        tvMeaning.setText(meaning);
 
         SharedPreferences prefs = getSharedPreferences("Settings", MODE_PRIVATE);
         isAutoPlayEnabled = prefs.getBoolean("autoPlayEnabled", false);
@@ -57,14 +61,46 @@ public class ResultActivity extends AppCompatActivity {
             }
         });
 
-
-
         ImageButton btnBack = findViewById(R.id.btnHome);
         btnBack.setOnClickListener(v -> {
             Intent home = new Intent(ResultActivity.this, MainActivity.class);
             startActivity(home);
             finish();
         });
+
+        dbHelper = new DatabaseHelper(this);
+        String word = tvWord.getText().toString();
+        isFavorite = dbHelper.isWordFavorite(word);
+        updateHeartIcon();
+        iHeart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String word = tvWord.getText().toString();
+                String pronunciation = tvPronounce.getText().toString();
+                String type = "("+tvPos.getText().toString()+")";
+                String meaning ="➜" + tvMeaning.getText().toString();
+
+                if (isFavorite) {
+                    if (dbHelper.removeFavoriteWord(word)) {
+                        Toast.makeText(ResultActivity.this, "Removed from favorites", Toast.LENGTH_SHORT).show();
+                        isFavorite = false;
+                    }
+                } else {
+                    if (dbHelper.addFavoriteWord(word, pronunciation, type, meaning)) {
+                        Toast.makeText(ResultActivity.this, "Added to favorites", Toast.LENGTH_SHORT).show();
+                        isFavorite = true;
+                    }
+                }
+                updateHeartIcon();
+            }
+        });
+    }
+    private void updateHeartIcon() {
+        if (isFavorite) {
+            iHeart.setImageResource(R.drawable.ic_heart_filled);
+        } else {
+            iHeart.setImageResource(R.drawable.ic_heart);
+        }
     }
 
     private void speakWord(String word) {
