@@ -1,22 +1,28 @@
 package com.example.app_dictionary_ev.data.model;
-
 import androidx.room.TypeConverter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MeaningsConverter {
-    private static Gson gson = new Gson();
+    private final Gson gson = new Gson();
 
     @TypeConverter
-    public static String fromMeanings(List<DictionaryEntry.Meaning> meanings) {
+    public String fromMeanings(List<DictionaryEntry.Meaning> meanings) {
+        if (meanings == null) {
+            return null;
+        }
         return gson.toJson(meanings);
     }
 
     @TypeConverter
-    public static List<DictionaryEntry.Meaning> toMeanings(String json) {
+    public List<DictionaryEntry.Meaning> toMeanings(String json) {
+        if (json == null) {
+            return new ArrayList<>();
+        }
         return gson.fromJson(json, new TypeToken<List<DictionaryEntry.Meaning>>(){}.getType());
     }
 }

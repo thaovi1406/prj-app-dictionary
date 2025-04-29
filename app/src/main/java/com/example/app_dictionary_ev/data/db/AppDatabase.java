@@ -9,13 +9,17 @@ import androidx.room.RoomDatabase;
 import com.example.app_dictionary_ev.data.dao.DictionaryDao;
 import com.example.app_dictionary_ev.data.model.DictionaryEntry;
 
-@Database(entities = {DictionaryEntry.class}, version = 1)
+@Database(entities = {DictionaryEntry.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
+
+    // Khai báo DAO
     public abstract DictionaryDao dictionaryDao();
 
+    // Singleton pattern
     private static volatile AppDatabase INSTANCE;
 
-    public static AppDatabase getDatabase(final Context context) {
+    // Phương thức để lấy instance của cơ sở dữ liệu
+    public static AppDatabase getInstance(final Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
