@@ -19,4 +19,7 @@ public interface DictionaryDao {
 
     @Query("SELECT * FROM dictionary")
     List<DictionaryEntry> getAll();
+
+    @Query("SELECT COUNT(*) FROM dictionary")
+    int getCount();
 }
