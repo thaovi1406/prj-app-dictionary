@@ -1,11 +1,14 @@
 package com.example.app_dictionary_ev;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,46 +25,48 @@ public class SearchHome extends AppCompatActivity {
     private EditText searchEditText;
     private ImageButton clearButton;
     private DictionaryAdapter adapter;
+    private RecyclerView rvSuggestions;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Ánh xạ view
         searchEditText = findViewById(R.id.searchText);
         clearButton = findViewById(R.id.buttonClear);
+        rvSuggestions = findViewById(R.id.rvSuggestions);
+        progressBar = findViewById(R.id.progressBar);
 
-        AppDatabase database = AppDatabase.getInstance(this);
+        // Thiết lập RecyclerView cho gợi ý tìm kiếm
+        adapter = new DictionaryAdapter();
+        rvSuggestions.setAdapter(adapter);
+        rvSuggestions.setLayoutManager(new LinearLayoutManager(this));
+        rvSuggestions.setVisibility(View.GONE); // Ẩn ban đầu
+
+        // Khởi tạo ViewModel
+        AppDatabase database = AppDatabase.getDatabase(this);
         DictionaryDao dictionaryDao = database.dictionaryDao();
-
         DictionaryViewModelFactory factory = new DictionaryViewModelFactory(dictionaryDao);
         viewModel = new ViewModelProvider(this, factory).get(DictionaryViewModel.class);
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        adapter = new DictionaryAdapter();
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        // Quan sát kết quả tìm kiếm
         viewModel.getSearchResults().observe(this, results -> {
-            adapter.setData(results);
-        });
-
-        // Khởi tạo dữ liệu
-        DatabaseInitializer.populateDatabase(this, new DatabaseInitializer.InitializationCallback() {
-            @Override
-            public void onComplete(int count) {
-                if (count > 0) {
-                    Toast.makeText(SearchHome.this, "Initialized " + count + " entries", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onError(Exception e) {
-                Toast.makeText(SearchHome.this, "Failed to initialize database: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            progressBar.setVisibility(View.GONE);
+            if (results != null && !results.isEmpty()) {
+                adapter.setData(results);
+                rvSuggestions.setVisibility(View.VISIBLE);
+            } else {
+                rvSuggestions.setVisibility(View.GONE);
             }
         });
 
+        // Xử lý sự kiện tìm kiếm
         searchEditText.addTextChangedListener(new TextWatcher() {
+            private Handler handler = new Handler();
+            private Runnable runnable;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
@@ -70,15 +75,42 @@ public class SearchHome extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                handler.removeCallbacks(runnable);
                 String keyword = s.toString().trim();
-                viewModel.search(keyword);
                 clearButton.setVisibility(keyword.isEmpty() ? View.GONE : View.VISIBLE);
+
+                if (!keyword.isEmpty()) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    rvSuggestions.setVisibility(View.VISIBLE);
+
+                    runnable = () -> {
+                        if (keyword.length() >= 3) {
+                            viewModel.searchByPrefix(keyword);
+                        } else {
+                            rvSuggestions.setVisibility(View.GONE);
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    };
+                    handler.postDelayed(runnable, 300); // Debounce 300ms
+                } else {
+                    rvSuggestions.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
+                }
             }
         });
 
+        // Xử lý nút xóa
         clearButton.setOnClickListener(v -> {
             searchEditText.setText("");
-            clearButton.setVisibility(View.GONE);
+            rvSuggestions.setVisibility(View.GONE);
+        });
+
+        // Xử lý khi chọn một gợi ý
+        adapter.setOnItemClickListener(entry -> {
+            // Chuyển sang màn hình chi tiết từ
+            Intent intent = new Intent(SearchHome.this, ResultActivity.class);
+            intent.putExtra("word", entry.getWord());
+            startActivity(intent);
         });
     }
 }
