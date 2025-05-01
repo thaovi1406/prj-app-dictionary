@@ -28,11 +28,26 @@ public class DatabaseInitializer {
 
     public static void populateDatabase(Context context, InitializationCallback callback) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        AppDatabase db = AppDatabase.getDatabase(context);
+
+
+            // Đã khởi tạo rồi
+        if (prefs.getBoolean(KEY_INITIALIZED, false)) //&& !db.dictionaryDao().getAll().isEmpty())
+        {
+            callback.onComplete(0);
+            return;
+        }
+
+        // Đang có thread khác khởi tạo
+//        if (!isInitializing.compareAndSet(false, true)) {
+//            callback.onComplete(0);
+//            return;
+//        }
 
         Executors.newSingleThreadExecutor().execute(() -> {
-            // Đã khởi tạo rồi
-            if (prefs.getBoolean(KEY_INITIALIZED, false) && !db.dictionaryDao().getAll().isEmpty()) {
+            AppDatabase db = AppDatabase.getDatabase(context);
+
+            if (prefs.getBoolean(KEY_INITIALIZED, false)) //&& !db.dictionaryDao().getAll().isEmpty())
+            {
                 callback.onComplete(0);
                 return;
             }
@@ -91,38 +106,5 @@ public class DatabaseInitializer {
             reader.endArray();
         }
         return totalInserted;
-//        try (InputStream is = context.getAssets().open("anhviet.json")) {
-//            String json = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
-//
-//            Gson gson = new Gson();
-//            List<DictionaryEntry> entries = gson.fromJson(json,
-//                    new TypeToken<List<DictionaryEntry>>(){}.getType());
-//
-//            db.dictionaryDao().insertAll(entries);
-//        }
     }
-
 }
-//    public static void populateDatabase(Context context) {
-//        AppDatabase db = Room.databaseBuilder(context.getApplicationContext(),
-//                AppDatabase.class, "dictionary-db").build();
-//
-//        new Thread(() -> {
-//            // Đọc file JSON từ assets
-//            try (InputStream is = context.getAssets().open("anhviet.json")) {
-//                int size = is.available();
-//                byte[] buffer = new byte[size];
-//                is.read(buffer);
-//                String json = new String(buffer, "UTF-8");
-//
-//                // Parse JSON
-//                Gson gson = new Gson();
-//                List<DictionaryEntry> entries = gson.fromJson(json, new TypeToken<List<DictionaryEntry>>(){}.getType());
-//
-//                // Lưu vào Room
-//                db.dictionaryDao().insertAll(entries);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }).start();
-//    }

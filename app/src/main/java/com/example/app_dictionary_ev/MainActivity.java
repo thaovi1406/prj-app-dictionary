@@ -2,6 +2,7 @@ package com.example.app_dictionary_ev;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -12,12 +13,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.app_dictionary_ev.data.db.AppDatabase;
 import com.example.app_dictionary_ev.data.db.DatabaseInitializer;
+import com.example.app_dictionary_ev.data.model.DictionaryEntry;
 import com.google.firebase.FirebaseApp;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.concurrent.Executors;
+
+public class MainActivity extends AppCompatActivity implements SearchHelper.OnWordSelectedListener {
     private ProgressBar progressBar;
     private ConstraintLayout mainContent;
+    private SearchHelper searchHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +36,40 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         mainContent = findViewById(R.id.main);
 
-        showLoading(true);
-        // Kiểm tra và tải dữ liệu
-        checkAndLoadData();
+        searchHelper = new SearchHelper(this, findViewById(android.R.id.content));
+        searchHelper.setOnWordSelectedListener(this);
+
+        checkDatabaseInitialization();
+
+    }
+    @Override
+    public void onWordSelected(DictionaryEntry entry) {
+        // Xử lý khi từ được chọn
+        Toast.makeText(this, "Selected: " + entry.word, Toast.LENGTH_SHORT).show();
+    }
+    private void checkDatabaseInitialization(){
+        Executors.newSingleThreadExecutor().execute(() -> {
+            boolean needInit = needToInitializeData();
+            runOnUiThread(() -> {
+                if (needInit) {
+                    showLoading(true);
+                    checkAndLoadData();
+                } else {
+                    showLoading(false);
+                    initUI();
+                }
+            });
+        });
+    }
+
+    private boolean needToInitializeData() {
+        SharedPreferences prefs = getSharedPreferences("db_init_prefs", MODE_PRIVATE);
+        if (prefs.getBoolean("is_initialized", false)) {
+            return false;
+        }
+        int count = AppDatabase.getDatabase(this).dictionaryDao().getCount();
+        return count == 0;
+
     }
     private void showLoading(boolean isLoading) {
         progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
