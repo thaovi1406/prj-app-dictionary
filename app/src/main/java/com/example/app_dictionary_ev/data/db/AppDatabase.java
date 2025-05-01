@@ -15,19 +15,15 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase INSTANCE;
 
-    // Remove the getInstance(SearchHome) method as it's not standard
-    // Use getDatabase(Context) instead for consistency
-
     public static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(
-                                    context.getApplicationContext(),
-                                    AppDatabase.class,
-                                    "dictionary_db"
-                            )
-                            .build();
+                            context.getApplicationContext(),
+                            AppDatabase.class,
+                            "dictionary_db"
+                    ).build();
                 }
             }
         }
