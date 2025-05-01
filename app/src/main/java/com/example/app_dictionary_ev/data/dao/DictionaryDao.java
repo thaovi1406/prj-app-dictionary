@@ -20,18 +20,9 @@ public interface DictionaryDao {
     @Query("SELECT * FROM dictionary")
     List<DictionaryEntry> getAll();
 
-    // Tìm kiếm theo tiền tố (prefix)
+    @Query("SELECT COUNT(*) FROM dictionary")
+    int getCount();
+
     @Query("SELECT * FROM dictionary WHERE word LIKE :query || '%' LIMIT 20")
-    List<DictionaryEntry> searchByPrefix(String query);
-
-    // Tìm kiếm mờ (fuzzy search)
-    @Query("SELECT * FROM dictionary WHERE word LIKE '%' || :query || '%' LIMIT 20")
-    List<DictionaryEntry> fuzzySearch(String query);
-
-    // Tìm kiếm nâng cao (theo từ loại)
-    @Query("SELECT * FROM dictionary WHERE word LIKE :query || '%' AND pos = :partOfSpeech LIMIT 20")
-    List<DictionaryEntry> searchByPrefixAndPos(String query, String partOfSpeech);
-
-    @Query("SELECT * FROM dictionary WHERE word LIKE :keyword")
-    List<DictionaryEntry> searchWords(String keyword);
+    List<DictionaryEntry> searchWords(String query);
 }
