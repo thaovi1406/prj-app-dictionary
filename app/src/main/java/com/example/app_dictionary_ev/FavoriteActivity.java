@@ -22,6 +22,9 @@ public class FavoriteActivity extends AppCompatActivity {
         dbHelper = new DatabaseHelper(this);
         setContentView(R.layout.history_activity);
 
+        CustomHeader customHeader = findViewById(R.id.customHeader);
+        customHeader.setTitle("Yêu thích");
+
         RecyclerView recyclerView = findViewById(R.id.rvVocab);
 
         List<VocabHisModal> favoriteItems = getFavoriteWords();

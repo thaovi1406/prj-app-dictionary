@@ -28,7 +28,9 @@
                 android:background="@drawable/card_background"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="16dp">
+                android:padding="16dp"
+                android:clickable="true"
+                android:onClick="onSpeedClick">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -49,9 +51,10 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/speedTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nhanh"
+                        android:text="Bình thường"
                         android:textColor="#1D93F3"
                         android:textSize="14sp" />
                 </LinearLayout>
