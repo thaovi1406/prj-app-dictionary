@@ -149,6 +149,9 @@ public class ResultActivity extends AppCompatActivity {
         Log.d("ResultActivity", "onCreate called");
         setContentView(R.layout.search_result);
 
+        CustomHeader customHeader = findViewById(R.id.customHeader);
+        customHeader.setTitle("");
+
         TextView tvWord = findViewById(R.id.tvWord);
         TextView tvPronounce = findViewById(R.id.tvPronounce);
         TextView tvPos = findViewById(R.id.tvPos);
@@ -173,6 +176,10 @@ public class ResultActivity extends AppCompatActivity {
             @Override
             public void onInit(int status) {
                 if (status == TextToSpeech.SUCCESS) {
+                    // Áp dụng tốc độ từ SharedPreferences
+                    float speed = prefs.getFloat("speed", 1.0f); // Mặc định 1.0f
+                    textToSpeech.setSpeechRate(speed);
+
                     textToSpeech.setLanguage(Locale.US);
                     if (isAutoPlayEnabled && word != null) {
                         speakWord(word);
