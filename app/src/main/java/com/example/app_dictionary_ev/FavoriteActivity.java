@@ -129,10 +129,8 @@ public class FavoriteActivity extends AppCompatActivity {
             @Override public void afterTextChanged(Editable s) {}
         });
 
-        // Nút xoá ô tìm kiếm
         buttonClear.setOnClickListener(v -> searchText.setText(""));
 
-        // Nút quay về
         ImageButton btnBack = findViewById(R.id.btnHome);
         btnBack.setOnClickListener(v -> {
             Intent intent = new Intent(FavoriteActivity.this, MainActivity.class);
@@ -141,7 +139,6 @@ public class FavoriteActivity extends AppCompatActivity {
         });
     }
 
-    // Truy vấn lấy danh sách từ yêu thích từ SQLite
     private List<VocabHisModal> getFavoriteWords() {
         List<VocabHisModal> favoriteItems = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();

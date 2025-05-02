@@ -54,11 +54,6 @@ public class SettingsActivity extends AppCompatActivity {
                 editor.putBoolean("autoPlayEnabled", isChecked);
                 editor.apply();
 
-                if (isChecked) {
-                    Toast.makeText(SettingsActivity.this, "Tự động phát âm: Bật", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(SettingsActivity.this, "Tự động phát âm: Tắt", Toast.LENGTH_SHORT).show();
-                }
             }
         });
     }

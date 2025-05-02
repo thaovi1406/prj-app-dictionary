@@ -12,6 +12,7 @@ constraintlayout = "2.2.1"
 recyclerview = "1.3.2"
 translate= "17.0.3"
 firebaseFirestore = "25.1.3"
+roomCommonJvm = "2.7.1"
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -26,6 +27,7 @@ firebaseFirestore = { group = "com.google.firebase", name = "firebase-firestore"
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
