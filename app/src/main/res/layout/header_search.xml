@@ -1,86 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@android:color/white"
+    android:id="@+id/headerSearch"
     tools:context=".SearchHome">
-
-    <!-- Thanh tìm kiếm -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="90dp"
         android:background="@color/blue"
-        android:padding="16dp">
-
-        <!-- EditText tìm kiếm -->
+        android:paddingTop="25dp">
         <EditText
-            android:id="@+id/searchText"
             android:layout_width="0dp"
             android:layout_height="48dp"
+            android:id="@+id/searchText"
             android:background="@drawable/bg_editext"
-            android:hint="Tìm kiếm từ..."
-            android:paddingStart="12dp"
-            android:paddingEnd="40dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:textSize="18sp"
-            android:textColor="@android:color/black"
-            android:textColorHint="@android:color/darker_gray"
+            android:hint="search"
+            android:padding="8dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:textSize="20sp"
+            android:textColor="#000000"
             android:drawableStart="@drawable/ic_search"
-            android:inputType="text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
 
-        <!-- Nút xóa -->
         <ImageButton
             android:id="@+id/buttonClear"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="20dp"
             android:background="@null"
-            android:contentDescription="Xóa nội dung"
-            android:padding="8dp"
+            android:contentDescription="Clear input"
+            android:padding="15dp"
             android:scaleType="centerInside"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@id/searchText"
-            app:layout_constraintTop_toTopOf="@id/searchText"
-            app:layout_constraintBottom_toBottomOf="@id/searchText"
-            android:layout_marginEnd="8dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteY="-1dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- ProgressBar khi tải dữ liệu -->
-    <ProgressBar
-        android:id="@+id/loadingProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        android:layout_marginTop="16dp" />
 
-    <!-- TextView khi không tìm thấy kết quả -->
-    <TextView
-        android:id="@+id/emptyTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Không tìm thấy kết quả"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="16sp"
-        android:visibility="gone"
-        android:layout_marginTop="16dp" />
-
-    <!-- RecyclerView hiển thị kết quả -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="8dp"
-        android:clipToPadding="false" />
 
 </LinearLayout>

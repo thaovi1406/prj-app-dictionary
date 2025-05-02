@@ -6,12 +6,14 @@ import android.util.Log;
 
 import com.example.app_dictionary_ev.data.model.DictionaryEntry;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -19,7 +21,6 @@ public class DatabaseInitializer {
     private static final String PREFS_NAME = "db_init_prefs";
     private static final String KEY_INITIALIZED = "is_initialized";
     private static final AtomicBoolean isInitializing = new AtomicBoolean(false);
-
     public interface InitializationCallback {
         void onComplete(int count);
         void onError(Exception e);
@@ -27,27 +28,41 @@ public class DatabaseInitializer {
 
     public static void populateDatabase(Context context, InitializationCallback callback) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        AppDatabase db = AppDatabase.getInstance(context);
+
+
+        // Đã khởi tạo rồi
+        if (prefs.getBoolean(KEY_INITIALIZED, false)) //&& !db.dictionaryDao().getAll().isEmpty())
+        {
+            callback.onComplete(0);
+            return;
+        }
+
+        // Đang có thread khác khởi tạo
+//        if (!isInitializing.compareAndSet(false, true)) {
+//            callback.onComplete(0);
+//            return;
+//        }
 
         Executors.newSingleThreadExecutor().execute(() -> {
+            AppDatabase db = AppDatabase.getDatabase(context);
+
+            if (prefs.getBoolean(KEY_INITIALIZED, false)) //&& !db.dictionaryDao().getAll().isEmpty())
+            {
+                callback.onComplete(0);
+                return;
+            }
+
+            // Đang có thread khác khởi tạo
+            if (!isInitializing.compareAndSet(false, true)) {
+                callback.onComplete(0);
+                return;
+            }
+
             try {
-                // Kiểm tra xem đã khởi tạo chưa
-                List<DictionaryEntry> existingData = db.dictionaryDao().getAll();
-                if (prefs.getBoolean(KEY_INITIALIZED, false) && !existingData.isEmpty()) {
-                    callback.onComplete(0);
-                    return;
-                }
-
-                // Kiểm tra xem có thread khác đang khởi tạo không
-                if (!isInitializing.compareAndSet(false, true)) {
-                    callback.onComplete(0);
-                    return;
-                }
-
-                // Khởi tạo dữ liệu
+                // Thực hiện khởi tạo
                 int count = populateData(context, db);
 
-                // Đánh dấu đã khởi tạo
+                // Đánh dấu thành công
                 prefs.edit().putBoolean(KEY_INITIALIZED, true).apply();
                 callback.onComplete(count);
             } catch (Exception e) {
@@ -58,7 +73,6 @@ public class DatabaseInitializer {
             }
         });
     }
-
     private static int populateData(Context context, AppDatabase db) throws Exception {
         int totalInserted = 0;
         try (InputStream is = context.getAssets().open("anhviet.json");
@@ -66,10 +80,10 @@ public class DatabaseInitializer {
              JsonReader reader = new JsonReader(isr)) {
 
             Gson gson = new Gson();
-            reader.beginArray();
+            reader.beginArray(); // Bắt đầu mảng JSON
 
             List<DictionaryEntry> batch = new ArrayList<>();
-            final int BATCH_SIZE = 50;
+            final int BATCH_SIZE = 50; // hoặc 100 nếu máy mạnh hơn
 
             while (reader.hasNext()) {
                 DictionaryEntry entry = gson.fromJson(reader, DictionaryEntry.class);
@@ -79,18 +93,17 @@ public class DatabaseInitializer {
 
                     if (batch.size() >= BATCH_SIZE) {
                         db.dictionaryDao().insertAll(batch);
-                        batch.clear();
+                        batch.clear(); // reset danh sách
                     }
                 }
             }
 
+            // Insert nốt những phần còn lại
             if (!batch.isEmpty()) {
                 db.dictionaryDao().insertAll(batch);
             }
 
             reader.endArray();
-        } catch (Exception e) {
-            throw new Exception("Failed to load anhviet.json. Ensure the file exists in assets and is correctly formatted.", e);
         }
         return totalInserted;
     }
