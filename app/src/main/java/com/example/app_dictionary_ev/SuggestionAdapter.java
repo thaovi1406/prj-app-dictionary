@@ -1,5 +1,73 @@
+//package com.example.app_dictionary_ev;
+//
+//import android.view.LayoutInflater;
+//import android.view.View;
+//import android.view.ViewGroup;
+//import android.widget.ImageView;
+//import android.widget.TextView;
+//
+//import androidx.annotation.NonNull;
+//import androidx.recyclerview.widget.RecyclerView;
+//
+//import java.util.List;
+//
+//public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.SuggestionViewHolder> {
+//    private List<String> suggestions;
+//    private boolean[] likedStates;
+//
+//    public SuggestionAdapter(List<String> suggestions) {
+//        this.suggestions = suggestions;
+//        this.likedStates = new boolean[suggestions.size()];
+//    }
+//
+//    // Thêm phương thức để cập nhật dữ liệu
+//    public void updateSuggestions(List<String> newSuggestions) {
+//        this.suggestions.clear();
+//        this.suggestions.addAll(newSuggestions);
+//        this.likedStates = new boolean[suggestions.size()];
+//        notifyDataSetChanged();
+//    }
+//
+//    @NonNull
+//    @Override
+//    public SuggestionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_suggestion, parent, false);
+//        return new SuggestionViewHolder(view);
+//    }
+//
+//    @Override
+//    public void onBindViewHolder(@NonNull SuggestionViewHolder holder, int position) {
+//        holder.tvSuggestion.setText(suggestions.get(position));
+//        holder.ivHeart.setImageResource(likedStates[position] ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
+//        holder.ivHeart.setOnClickListener(v -> {
+//            likedStates[position] = !likedStates[position];
+//            holder.ivHeart.setImageResource(likedStates[position] ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
+//        });
+//    }
+//
+//    @Override
+//    public int getItemCount() {
+//        return suggestions.size();
+//    }
+//
+//    static class SuggestionViewHolder extends RecyclerView.ViewHolder {
+//        TextView tvSuggestion;
+//        ImageView ivHeart;
+//        ImageView ivArrow;
+//        ImageView ivSearchIcon;
+//
+//        public SuggestionViewHolder(@NonNull View itemView) {
+//            super(itemView);
+//            tvSuggestion = itemView.findViewById(R.id.tvSuggestion);
+//            ivHeart = itemView.findViewById(R.id.ivHeart);
+//            ivArrow = itemView.findViewById(R.id.ivArrow);
+//            ivSearchIcon = itemView.findViewById(R.id.ivSearchIcon);
+//        }
+//    }
+//}
 package com.example.app_dictionary_ev;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,39 +77,74 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.app_dictionary_ev.data.model.DictionaryEntry;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.SuggestionViewHolder> {
-    private List<String> suggestions;
-    private boolean[] likedStates;
+    private List<DictionaryEntry> suggestions = new ArrayList<>();
+    private OnSuggestionClickListener listener;
+    private static final Map<String, String> POS_SHORT_FORM = new HashMap<>();
 
-    public SuggestionAdapter(List<String> suggestions) {
-        this.suggestions = suggestions;
-        this.likedStates = new boolean[suggestions.size()];
+    static {
+        POS_SHORT_FORM.put("danh từ", "n");
+        POS_SHORT_FORM.put("động từ", "v");
+        POS_SHORT_FORM.put("tính từ", "adj");
+        POS_SHORT_FORM.put("trạng từ", "adv");
+        POS_SHORT_FORM.put("giới từ", "prep");
+        POS_SHORT_FORM.put("đại từ", "pron");
+        POS_SHORT_FORM.put("liên từ", "conj");
+        POS_SHORT_FORM.put("ngoại động từ", "v.t");
+        POS_SHORT_FORM.put("thán từ", "interj");
     }
 
-    // Thêm phương thức để cập nhật dữ liệu
-    public void updateSuggestions(List<String> newSuggestions) {
-        this.suggestions.clear();
-        this.suggestions.addAll(newSuggestions);
-        this.likedStates = new boolean[suggestions.size()];
-        notifyDataSetChanged();
+    public interface OnSuggestionClickListener {
+        void onSuggestionClick(DictionaryEntry entry);
     }
 
     @NonNull
     @Override
     public SuggestionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_suggestion, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_resultsearch, parent, false);
         return new SuggestionViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull SuggestionViewHolder holder, int position) {
-        holder.tvSuggestion.setText(suggestions.get(position));
-        holder.ivHeart.setImageResource(likedStates[position] ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
-        holder.ivHeart.setOnClickListener(v -> {
-            likedStates[position] = !likedStates[position];
-            holder.ivHeart.setImageResource(likedStates[position] ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
+        DictionaryEntry entry = suggestions.get(position);
+        holder.tvWord.setText(entry.word);
+
+        // Chuyển đổi từ loại sang dạng rút gọn
+        String shortPos = POS_SHORT_FORM.getOrDefault(entry.pos, entry.pos);
+        String definition = entry.meanings != null && !entry.meanings.isEmpty()
+                ? entry.meanings.get(0).definition
+                : "Không có định nghĩa";
+
+        holder.tvMeaning.setText(String.format("(%s) %s", shortPos, definition));
+
+        // Xử lý sự kiện click cho TextView (dòng chữ)
+        holder.tvWord.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onSuggestionClick(entry);
+            }
+        });
+
+        // Xử lý sự kiện click cho ImageView (mũi tên)
+        holder.ivArrow.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onSuggestionClick(entry);
+            }
+        });
+
+        // Cấu hình sự kiện click cho các view khác nếu cần
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onSuggestionClick(entry);
+            }
         });
     }
 
@@ -50,18 +153,24 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
         return suggestions.size();
     }
 
+    public void setSuggestions(List<DictionaryEntry> newSuggestions) {
+        suggestions = newSuggestions;
+        notifyDataSetChanged();
+    }
+
+    public void setOnSuggestionClickListener(OnSuggestionClickListener listener) {
+        this.listener = listener;
+    }
+
     static class SuggestionViewHolder extends RecyclerView.ViewHolder {
-        TextView tvSuggestion;
-        ImageView ivHeart;
-        ImageView ivArrow;
-        ImageView ivSearchIcon;
+        TextView tvWord, tvMeaning;
+        ImageView ivArrow; // Đảm bảo ánh xạ ivArrow
 
         public SuggestionViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvSuggestion = itemView.findViewById(R.id.tvSuggestion);
-            ivHeart = itemView.findViewById(R.id.ivHeart);
-            ivArrow = itemView.findViewById(R.id.ivArrow);
-            ivSearchIcon = itemView.findViewById(R.id.ivSearchIcon);
+            tvWord = itemView.findViewById(R.id.tvWord);
+            tvMeaning = itemView.findViewById(R.id.tvMeaning);
+            ivArrow = itemView.findViewById(R.id.ivArrow); // Khai báo ivArrow
         }
     }
 }
