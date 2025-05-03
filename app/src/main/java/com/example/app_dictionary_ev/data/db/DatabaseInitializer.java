@@ -30,7 +30,7 @@ public class DatabaseInitializer {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
 
-        // Đã khởi tạo rồi
+            // Đã khởi tạo rồi
         if (prefs.getBoolean(KEY_INITIALIZED, false)) //&& !db.dictionaryDao().getAll().isEmpty())
         {
             callback.onComplete(0);

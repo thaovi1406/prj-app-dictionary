@@ -17,7 +17,6 @@ import com.example.app_dictionary_ev.data.db.AppDatabase;
 import com.example.app_dictionary_ev.data.model.DictionaryEntry;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class SearchHelper {
@@ -31,11 +30,9 @@ public class SearchHelper {
     private final Handler handler = new Handler();
     private Runnable searchRunnable;
     private OnWordSelectedListener wordSelectedListener;
-
     public interface OnWordSelectedListener {
         void onWordSelected(DictionaryEntry entry);
     }
-
     public SearchHelper(Context context, View rootView) {
         this.context = context;
         this.db = AppDatabase.getDatabase(context);
@@ -53,19 +50,14 @@ public class SearchHelper {
 
         setupSearchFunctionality();
     }
-
     public void setOnWordSelectedListener(OnWordSelectedListener listener) {
         this.wordSelectedListener = listener;
     }
-
     private void setupSearchFunctionality() {
         // Xử lý sự kiện tìm kiếm
         searchText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {}
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void afterTextChanged(Editable s) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -89,7 +81,6 @@ public class SearchHelper {
             rvSuggestions.setVisibility(View.GONE);
         });
     }
-
     private void searchWords(String query) {
         if (query.isEmpty()) {
             rvSuggestions.setVisibility(View.GONE);
@@ -98,11 +89,9 @@ public class SearchHelper {
 
         showLoading(true);
 
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> {
+        Executors.newSingleThreadExecutor().execute(() -> {
             List<DictionaryEntry> results = db.dictionaryDao().searchWords(query);
 
-            // Chạy trên main thread để cập nhật UI
             ((android.app.Activity) context).runOnUiThread(() -> {
                 showLoading(false);
                 if (results.isEmpty()) {
@@ -113,8 +102,13 @@ public class SearchHelper {
                 }
             });
         });
+        Executors.newSingleThreadExecutor().execute(() -> {
+            List<DictionaryEntry> results = db.dictionaryDao().searchWords(query);
+            Log.d("SearchHelper", "Search query: " + query);
+            Log.d("SearchHelper", "Results count: " + results.size());
+            // ... tiếp tục
+        });
     }
-
     private void showLoading(boolean isLoading) {
         progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
     }
