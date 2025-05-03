@@ -26,8 +26,6 @@
         <activity android:name=".TranslateTextActivity"/>
         <activity android:name=".SettingsActivity"/>
         <activity android:name=".FavoriteActivity"/>
-        <activity android:name=".SearchHome"
-            android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>

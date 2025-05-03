@@ -26,4 +26,5 @@ public class DictionaryEntry {
     }
 }
 
+
 // Converter để lưu List<Meaning> dưới dạng JSON

@@ -15,9 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.app_dictionary_ev.data.db.AppDatabase;
 import com.example.app_dictionary_ev.data.model.DictionaryEntry;
+import com.example.app_dictionary_ev.HistoryDatabaseHelper;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 
 public class SearchHelper {
     private final Context context;
@@ -30,9 +33,11 @@ public class SearchHelper {
     private final Handler handler = new Handler();
     private Runnable searchRunnable;
     private OnWordSelectedListener wordSelectedListener;
+
     public interface OnWordSelectedListener {
         void onWordSelected(DictionaryEntry entry);
     }
+
     public SearchHelper(Context context, View rootView) {
         this.context = context;
         this.db = AppDatabase.getDatabase(context);
@@ -50,14 +55,19 @@ public class SearchHelper {
 
         setupSearchFunctionality();
     }
+
     public void setOnWordSelectedListener(OnWordSelectedListener listener) {
         this.wordSelectedListener = listener;
     }
+
     private void setupSearchFunctionality() {
         // Xử lý sự kiện tìm kiếm
         searchText.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void afterTextChanged(Editable s) {}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -72,6 +82,21 @@ public class SearchHelper {
             if (wordSelectedListener != null) {
                 wordSelectedListener.onWordSelected(entry);
             }
+
+            // ✅ Thêm vào database lịch sử
+            String word = entry.word;
+            String pronounce = entry.pronunciation;
+            String pos = entry.pos;
+
+            // Lấy nghĩa đầu tiên nếu có
+            String meaning = "";
+            if (entry.meanings != null && !entry.meanings.isEmpty()) {
+                meaning = entry.meanings.get(0).definition;  // hoặc nối tất cả lại
+            }
+
+            HistoryDatabaseHelper dbHelper = new HistoryDatabaseHelper(context);
+            dbHelper.addHistoryWord(word, pronounce, pos, meaning);
+
             rvSuggestions.setVisibility(View.GONE);
         });
 
@@ -81,6 +106,7 @@ public class SearchHelper {
             rvSuggestions.setVisibility(View.GONE);
         });
     }
+
     private void searchWords(String query) {
         if (query.isEmpty()) {
             rvSuggestions.setVisibility(View.GONE);
@@ -89,9 +115,11 @@ public class SearchHelper {
 
         showLoading(true);
 
-        Executors.newSingleThreadExecutor().execute(() -> {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
             List<DictionaryEntry> results = db.dictionaryDao().searchWords(query);
 
+            // Chạy trên main thread để cập nhật UI
             ((android.app.Activity) context).runOnUiThread(() -> {
                 showLoading(false);
                 if (results.isEmpty()) {
@@ -102,13 +130,8 @@ public class SearchHelper {
                 }
             });
         });
-        Executors.newSingleThreadExecutor().execute(() -> {
-            List<DictionaryEntry> results = db.dictionaryDao().searchWords(query);
-            Log.d("SearchHelper", "Search query: " + query);
-            Log.d("SearchHelper", "Results count: " + results.size());
-            // ... tiếp tục
-        });
     }
+
     private void showLoading(boolean isLoading) {
         progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
     }
