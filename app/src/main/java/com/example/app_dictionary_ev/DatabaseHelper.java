@@ -8,8 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "FavoriteWords.db";
-    private static final int DATABASE_VERSION = 1;
-    private static final String TABLE_NAME = "favorites";
+    private static final int DATABASE_VERSION = 3;
+    public static final String TABLE_NAME = "favorites";
     private static final String COLUMN_ID = "_id";
     private static final String COLUMN_WORD = "word";
     private static final String COLUMN_PRONUNCIATION = "pronunciation";

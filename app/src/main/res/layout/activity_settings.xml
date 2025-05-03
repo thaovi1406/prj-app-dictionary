@@ -99,7 +99,8 @@
                 android:background="@drawable/card_background"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="16dp">
+                android:padding="16dp"
+                android:onClick="onRestoreDatabaseClick">
 
                 <ImageView
                     android:layout_width="24dp"
