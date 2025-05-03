@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/backgroundapp"
     tools:context=".FavoriteActivity">
+
     <com.example.app_dictionary_ev.CustomHeader
         android:id="@+id/customHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
     <include
         android:id="@+id/searchBar"
         layout="@layout/search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_below="@id/customHeader"/>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -25,7 +26,10 @@
         android:layout_below="@id/searchBar"
         tools:ignore="NotSibling" />
 
+
+
     <LinearLayout
+        android:id="@+id/homeLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -37,5 +41,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Xóa"
+        android:background="@drawable/button_background"
+        android:backgroundTint="@null"
+        android:foreground="@null"
+        android:visibility="gone"
+        android:layout_above="@id/homeLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"/>
 
 </RelativeLayout>

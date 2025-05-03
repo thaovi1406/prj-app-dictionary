@@ -22,4 +22,7 @@ public interface DictionaryDao {
 
     @Query("SELECT COUNT(*) FROM dictionary")
     int getCount();
+
+    @Query("SELECT * FROM dictionary WHERE word LIKE :query || '%' LIMIT 20")
+    List<DictionaryEntry> searchWords(String query);
 }
