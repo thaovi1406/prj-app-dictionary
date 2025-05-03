@@ -30,7 +30,7 @@ public class DatabaseInitializer {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
 
-            // Đã khởi tạo rồi
+        // Đã khởi tạo rồi
         if (prefs.getBoolean(KEY_INITIALIZED, false)) //&& !db.dictionaryDao().getAll().isEmpty())
         {
             callback.onComplete(0);
@@ -80,10 +80,10 @@ public class DatabaseInitializer {
              JsonReader reader = new JsonReader(isr)) {
 
             Gson gson = new Gson();
-            reader.beginArray(); // Bắt đầu mảng JSON
+            reader.beginArray();
 
             List<DictionaryEntry> batch = new ArrayList<>();
-            final int BATCH_SIZE = 50; // hoặc 100 nếu máy mạnh hơn
+            final int BATCH_SIZE = 50;
 
             while (reader.hasNext()) {
                 DictionaryEntry entry = gson.fromJson(reader, DictionaryEntry.class);
