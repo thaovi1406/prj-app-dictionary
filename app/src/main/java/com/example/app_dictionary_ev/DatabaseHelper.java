@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.List;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "FavoriteWords.db";
     private static final int DATABASE_VERSION = 3;
@@ -67,5 +69,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int result = db.delete(TABLE_NAME, COLUMN_WORD + "=?", new String[]{word});
         db.close();
         return result > 0;
+    }
+    // Xóa nhiều từ khỏi danh sách yêu thích
+    public void deleteMultipleFromFavorites(List<VocabHisModal> items) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            db.beginTransaction();
+            for (VocabHisModal item : items) {
+                db.delete("favorites", "word = ?", new String[]{item.getWord()});
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
     }
 }
