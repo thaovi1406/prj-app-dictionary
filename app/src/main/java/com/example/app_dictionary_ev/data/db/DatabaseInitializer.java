@@ -80,10 +80,10 @@ public class DatabaseInitializer {
              JsonReader reader = new JsonReader(isr)) {
 
             Gson gson = new Gson();
-            reader.beginArray(); // Bắt đầu mảng JSON
+            reader.beginArray();
 
             List<DictionaryEntry> batch = new ArrayList<>();
-            final int BATCH_SIZE = 50; // hoặc 100 nếu máy mạnh hơn
+            final int BATCH_SIZE = 50;
 
             while (reader.hasNext()) {
                 DictionaryEntry entry = gson.fromJson(reader, DictionaryEntry.class);
