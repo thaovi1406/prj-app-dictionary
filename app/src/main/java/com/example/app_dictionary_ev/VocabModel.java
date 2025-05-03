@@ -46,10 +46,5 @@ public class VocabModel {
         return "";
     }
 
-    public String getAllMeanings() {
-        if (meanings != null && !meanings.isEmpty()) {
-            return meanings.get(0).getDefinition();
-        }
-        return "";
-    }
+
 }
