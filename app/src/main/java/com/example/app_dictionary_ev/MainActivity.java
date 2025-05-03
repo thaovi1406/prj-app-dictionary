@@ -106,6 +106,7 @@ import com.example.app_dictionary_ev.data.db.AppDatabase;
 import com.example.app_dictionary_ev.data.db.DatabaseInitializer;
 import com.example.app_dictionary_ev.data.model.DictionaryEntry;
 import com.google.firebase.FirebaseApp;
+import com.google.gson.Gson;
 
 import java.util.concurrent.Executors;
 
@@ -133,15 +134,16 @@ public class MainActivity extends AppCompatActivity implements SearchHelper.OnWo
     }
     @Override
     public void onWordSelected(DictionaryEntry entry) {
-        // Xử lý khi từ được chọn
         Intent intent = new Intent(this, ResultActivity.class);
 
-        // Truyền dữ liệu về từ điển vào Intent
         intent.putExtra("word", entry.word);
-        intent.putExtra("definition", entry.meanings != null && !entry.meanings.isEmpty() ? entry.meanings.get(0).definition : "Không có định nghĩa");
-        intent.putExtra("pos", entry.pos); // Truyền từ loại nếu cần
+        intent.putExtra("pronunciation", entry.pronunciation);
+        intent.putExtra("pos", entry.pos);
 
-        // Khởi chạy ResultActivity
+        Gson gson = new Gson();
+        String meaningsJson = gson.toJson(entry.meanings);
+        intent.putExtra("meanings", meaningsJson);
+
         startActivity(intent);
     }
     private void checkDatabaseInitialization(){

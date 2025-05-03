@@ -58,7 +58,7 @@ public class TranslateTextActivity extends AppCompatActivity {
         // Khởi tạo RecyclerView
         recyclerView = findViewById(R.id.rvTranslated);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setReverseLayout(true);
+//        layoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(layoutManager);
         historyList = new ArrayList<>();
         adapter = new TranslationHistoryAdapter(this, historyList);

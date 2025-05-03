@@ -83,29 +83,11 @@
             android:textSize="18sp"
             android:id="@+id/tvPos"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMeanings"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="➜ Sự chú ý"
-            android:textColor="@android:color/holo_purple"
-            android:textSize="18sp"
-            android:id="@+id/tvMeaning"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="to pay attention to"
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="(chú ý tới)"
-            android:textColor="@android:color/black"
-            android:textSize="14sp" />
-
-
+            android:layout_marginTop="10dp"/>
 
     </LinearLayout>
     <LinearLayout
