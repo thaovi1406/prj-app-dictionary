@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -142,6 +143,7 @@ public class FavoriteActivity extends AppCompatActivity {
 
         cursor.close();
         db.close();
+        Collections.reverse(favoriteItems);
         return favoriteItems;
     }
 }

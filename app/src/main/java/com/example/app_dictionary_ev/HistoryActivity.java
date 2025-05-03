@@ -25,8 +25,8 @@ public class HistoryActivity extends AppCompatActivity {
     private ImageButton buttonClear;
     private RecyclerView rvHistory;
     private VocabAdapter adapter;
-    private List<VocabHisModal> allHistory;
-    private List<VocabHisModal> filteredList;
+    private List<VocabModel> allHistory;
+    private List<VocabModel> filteredList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class HistoryActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String query = s.toString().toLowerCase().trim();
                 filteredList.clear();
-                for (VocabHisModal item : allHistory) {
+                for (VocabModel item : allHistory) {
                     if (item.getWord().toLowerCase().contains(query)) {
                         filteredList.add(item);
                     }
@@ -72,14 +72,13 @@ public class HistoryActivity extends AppCompatActivity {
 
         ImageButton btnBack = findViewById(R.id.btnHome);
         btnBack.setOnClickListener(v -> {
-            Intent intent = new Intent(HistoryActivity.this, MainActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(HistoryActivity.this, MainActivity.class));
             finish();
         });
     }
 
-    private List<VocabHisModal> getHistoryWords() {
-        List<VocabHisModal> historyItems = new ArrayList<>();
+    private List<VocabModel> getHistoryWords() {
+        List<VocabModel> historyItems = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.query("history", new String[]{"word", "pronunciation", "type", "meaning"},
                 null, null, null, null, null);
@@ -89,12 +88,26 @@ public class HistoryActivity extends AppCompatActivity {
             String pronunciation = cursor.getString(cursor.getColumnIndexOrThrow("pronunciation"));
             String type = cursor.getString(cursor.getColumnIndexOrThrow("type"));
             String meaning = cursor.getString(cursor.getColumnIndexOrThrow("meaning"));
-            historyItems.add(new VocabHisModal(word, pronunciation, type, meaning));
+
+            // Tạo model chính
+            VocabModel vocab = new VocabModel();
+            vocab.setWord(word);
+            vocab.setPronunciation(pronunciation);
+            vocab.setPos(type);
+
+            // Meaning đơn lẻ vì trong lịch sử chỉ lưu 1 nghĩa
+            Meaning m = new Meaning();
+            m.setDefinition(meaning);
+            List<Meaning> meaningList = new ArrayList<>();
+            meaningList.add(m);
+            vocab.setMeanings(meaningList);
+
+            historyItems.add(vocab);
         }
 
         cursor.close();
         db.close();
-        Collections.reverse(historyItems);
+        Collections.reverse(historyItems); // Mới nhất lên đầu
         return historyItems;
     }
 }
