@@ -24,6 +24,7 @@ public class DictionaryEntry {
         public String example;
         public String note;
     }
+
 }
 
 

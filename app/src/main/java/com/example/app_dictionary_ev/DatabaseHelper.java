@@ -5,7 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import com.example.app_dictionary_ev.data.model.DictionaryEntry;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -54,17 +60,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean addFavoriteWord(String word, String pronunciation, String type, String meaning) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_WORD, word);
-        values.put(COLUMN_PRONUNCIATION, pronunciation);
-        values.put(COLUMN_TYPE, type);
-        values.put(COLUMN_MEANING, meaning);
-        long result = db.insert(TABLE_FAVORITES, null, values);
+//    public boolean addFavoriteWord(String word, String pronunciation, String type, String meaning) {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        ContentValues values = new ContentValues();
+//        values.put(COLUMN_WORD, word);
+//        values.put(COLUMN_PRONUNCIATION, pronunciation);
+//        values.put(COLUMN_TYPE, type);
+//        values.put(COLUMN_MEANING, meaning);
+//        long result = db.insert(TABLE_FAVORITES, null, values);
+//        db.close();
+//        return result != -1;
+//    }
+public boolean addFavoriteWord(String word, String pronunciation, String type, String meaning) {
+    SQLiteDatabase db = this.getWritableDatabase();
+
+    // Kiểm tra xem từ đã tồn tại chưa
+    String query = "SELECT 1 FROM " + TABLE_FAVORITES + " WHERE " + COLUMN_WORD + " = ?";
+    Cursor cursor = db.rawQuery(query, new String[]{word});
+
+    boolean exists = cursor.moveToFirst();  // true nếu đã có
+    cursor.close();
+
+    if (exists) {
         db.close();
-        return result != -1;
+        return false; // Không thêm vì đã tồn tại
     }
+
+    // Nếu chưa có thì thêm
+    ContentValues values = new ContentValues();
+    values.put(COLUMN_WORD, word);
+    values.put(COLUMN_PRONUNCIATION, pronunciation);
+    values.put(COLUMN_TYPE, type);
+    values.put(COLUMN_MEANING, meaning);
+
+    long result = db.insert(TABLE_FAVORITES, null, values);
+    db.close();
+    return result != -1;
+}
+
 
     public boolean isWordFavorite(String word) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -123,4 +156,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return rowsDeleted;
     }
+    public boolean addToFavorites(DictionaryEntry entry) {
+        if (entry == null || entry.word == null) return false;
+
+        if (isWordFavorite(entry.word)) return false;
+
+        StringBuilder meaningBuilder = new StringBuilder();
+        if (entry.meanings != null && !entry.meanings.isEmpty()) {
+            for (DictionaryEntry.Meaning m : entry.meanings) {
+                meaningBuilder.append("➜ ").append(m.definition).append("\n");
+                if (m.example != null) meaningBuilder.append(m.example).append("\n");
+                if (m.note != null) meaningBuilder.append("(").append(m.note).append(")\n");
+            }
+        }
+
+        return addFavoriteWord(
+                entry.word,
+                entry.pronunciation != null ? entry.pronunciation : "",
+                entry.pos != null ? entry.pos : "",
+                meaningBuilder.toString().trim()
+        );
+    }
+    public VocabModel getWordDetails(String word) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        VocabModel model = null;
+
+        Cursor cursor = db.rawQuery("SELECT * FROM words WHERE word = ?", new String[]{word});
+        if (cursor.moveToFirst()) {
+            try {
+                String pronunciation = cursor.getString(cursor.getColumnIndexOrThrow("pronunciation"));
+                String pos = cursor.getString(cursor.getColumnIndexOrThrow("pos"));
+                String meaningsJson = cursor.getString(cursor.getColumnIndexOrThrow("meanings"));
+
+                Gson gson = new Gson();
+                Type type = new TypeToken<List<Meaning>>() {}.getType();
+                List<Meaning> meanings = gson.fromJson(meaningsJson, type);
+
+                model = new VocabModel(word, pronunciation, pos, meanings);
+            } catch (IllegalArgumentException e) {
+                Log.e("DB_ERROR", "Column missing: " + e.getMessage());
+            }
+        }
+        cursor.close();
+        return model;
+    }
+
+
+
 }

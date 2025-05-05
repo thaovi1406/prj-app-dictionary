@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -73,13 +74,23 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
                 listener.onSuggestionClick(entry);
             }
         });
-
         // Cấu hình sự kiện click cho các view khác nếu cần
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onSuggestionClick(entry);
             }
         });
+        // Xử lý sự kiện click cho ivHeart
+        holder.ivHeart.setOnClickListener(v -> {
+            DatabaseHelper dbHelper = new DatabaseHelper(holder.itemView.getContext());
+            boolean success = dbHelper.addToFavorites(entry);
+            if (success) {
+                Toast.makeText(holder.itemView.getContext(), "Đã thêm vào yêu thích", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(holder.itemView.getContext(), "Từ đã có trong yêu thích", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override
@@ -99,12 +110,14 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
     static class SuggestionViewHolder extends RecyclerView.ViewHolder {
         TextView tvWord, tvMeaning;
         ImageView ivArrow; // Đảm bảo ánh xạ ivArrow
-
+        ImageView ivHeart;
         public SuggestionViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvWord = itemView.findViewById(R.id.tvWord);
-            tvMeaning = itemView.findViewById(R.id.tvMeaning);
+            tvWord = itemView.findViewById(R.id.tvWord); // Khai báo tvWord
+            tvMeaning = itemView.findViewById(R.id.tvMeaning); // Khai báo tvMeaning
             ivArrow = itemView.findViewById(R.id.ivArrow); // Khai báo ivArrow
+            ivHeart = itemView.findViewById(R.id.ivHeart); // Khai báo ivHeart
         }
+
     }
 }
