@@ -41,6 +41,9 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabAdapter.ViewHolder> 
                     Log.e("VocabAdapter", "TTS: Ngôn ngữ không được hỗ trợ hoặc thiếu dữ liệu");
                     Toast.makeText(context, "Ngôn ngữ Text-to-Speech không được hỗ trợ", Toast.LENGTH_SHORT).show();
                 } else {
+                    float speed = context.getSharedPreferences("Settings", Context.MODE_PRIVATE)
+                            .getFloat("speed", 1.0f);
+                    textToSpeech.setSpeechRate(speed);
                     isTtsInitialized = true;
                 }
             } else {
