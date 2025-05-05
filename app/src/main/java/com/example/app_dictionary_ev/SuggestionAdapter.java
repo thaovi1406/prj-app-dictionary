@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -73,13 +74,34 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
                 listener.onSuggestionClick(entry);
             }
         });
-
         // Cấu hình sự kiện click cho các view khác nếu cần
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onSuggestionClick(entry);
             }
         });
+        // Set icon trái tim theo trạng thái yêu thích
+        DatabaseHelper dbHelper = new DatabaseHelper(holder.itemView.getContext());
+        boolean isFavorite = dbHelper.isFavorite(entry.word);
+        holder.ivHeart.setImageResource(isFavorite ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
+
+        // Xử lý sự kiện click cho ivHeart
+        holder.ivHeart.setOnClickListener(v -> {
+            DatabaseHelper dbHelper1 = new DatabaseHelper(holder.itemView.getContext());
+            boolean currentlyFavorite = dbHelper1.isFavorite(entry.word);
+
+            if (currentlyFavorite) {
+                dbHelper1.removeFromFavorites(entry.word);
+                holder.ivHeart.setImageResource(R.drawable.ic_heart);
+                Toast.makeText(holder.itemView.getContext(), "Đã bỏ khỏi yêu thích", Toast.LENGTH_SHORT).show();
+            } else {
+                dbHelper1.addToFavorites(entry);
+                holder.ivHeart.setImageResource(R.drawable.ic_heart_filled);
+                Toast.makeText(holder.itemView.getContext(), "Đã thêm vào yêu thích", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
     @Override
@@ -99,12 +121,14 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
     static class SuggestionViewHolder extends RecyclerView.ViewHolder {
         TextView tvWord, tvMeaning;
         ImageView ivArrow; // Đảm bảo ánh xạ ivArrow
-
+        ImageView ivHeart;
         public SuggestionViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvWord = itemView.findViewById(R.id.tvWord);
-            tvMeaning = itemView.findViewById(R.id.tvMeaning);
+            tvWord = itemView.findViewById(R.id.tvWord); // Khai báo tvWord
+            tvMeaning = itemView.findViewById(R.id.tvMeaning); // Khai báo tvMeaning
             ivArrow = itemView.findViewById(R.id.ivArrow); // Khai báo ivArrow
+            ivHeart = itemView.findViewById(R.id.ivHeart); // Khai báo ivHeart
         }
+
     }
 }
