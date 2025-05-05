@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.List;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "AppDictionary.db";
     public static final int DATABASE_VERSION = 1;
@@ -101,5 +103,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int result = db.delete(TABLE_TRANSLATION_HISTORY, COLUMN_HISTORY_ID + "=?", new String[]{String.valueOf(id)});
         db.close();
         return result > 0;
+    }
+    public int removeFavoriteWords(List<String> words) {
+        if (words == null || words.isEmpty()) return 0;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Tạo danh sách ? tương ứng số lượng từ
+        StringBuilder placeholders = new StringBuilder();
+        String[] args = new String[words.size()];
+        for (int i = 0; i < words.size(); i++) {
+            placeholders.append("?,");
+            args[i] = words.get(i);
+        }
+        placeholders.setLength(placeholders.length() - 1); // Xóa dấu phẩy cuối
+
+        String whereClause = COLUMN_WORD + " IN (" + placeholders + ")";
+        int rowsDeleted = db.delete(TABLE_FAVORITES, whereClause, args);
+        db.close();
+        return rowsDeleted;
     }
 }
