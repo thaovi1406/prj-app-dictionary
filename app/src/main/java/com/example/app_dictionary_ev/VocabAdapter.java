@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -38,8 +39,6 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabAdapter.ViewHolder> 
             if (status == TextToSpeech.SUCCESS) {
                 int langResult = textToSpeech.setLanguage(Locale.getDefault());
                 if (langResult == TextToSpeech.LANG_MISSING_DATA || langResult == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    Log.e("VocabAdapter", "TTS: Ngôn ngữ không được hỗ trợ hoặc thiếu dữ liệu");
-                    Toast.makeText(context, "Ngôn ngữ Text-to-Speech không được hỗ trợ", Toast.LENGTH_SHORT).show();
                 } else {
                     isTtsInitialized = true;
                 }
@@ -66,7 +65,6 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabAdapter.ViewHolder> 
         holder.pos.setText(item.getPos());
         holder.meaning.setText(item.getFirstMeaning());
 
-        // Màu nền xen kẽ sử dụng tài nguyên
         int backgroundColor = position % 2 == 0
                 ? ContextCompat.getColor(context, R.color.light_blue)
                 : ContextCompat.getColor(context, R.color.white);
@@ -121,10 +119,19 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabAdapter.ViewHolder> 
             itemView.setOnClickListener(v -> {
                 VocabModel item = adapter.items.get(getAdapterPosition());
                 Intent intent = new Intent(itemView.getContext(), ResultActivity.class);
+
+                intent.putExtra("word", item.getWord());
+                intent.putExtra("pronunciation", item.getPronunciation());
+                intent.putExtra("pos", item.getPos());
+
+                List<Meaning> meanings = item.getMeanings();
                 Gson gson = new Gson();
-                String vocabJson = gson.toJson(item);
-                Log.d("VocabAdapter", "Sending vocabJson: " + vocabJson); // Gỡ lỗi
-                intent.putExtra("vocab", vocabJson);
+                String meaningsJson = gson.toJson(meanings != null ? meanings : new ArrayList<Meaning>());
+                intent.putExtra("meanings", meaningsJson);
+
+                Log.d("VocabAdapter", "Sending data: word=" + item.getWord() + ", pronunciation=" + item.getPronunciation() +
+                        ", pos=" + item.getPos() + ", meanings=" + meaningsJson);
+
                 itemView.getContext().startActivity(intent);
             });
         }
