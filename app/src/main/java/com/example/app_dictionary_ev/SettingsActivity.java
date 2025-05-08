@@ -10,6 +10,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.content.DialogInterface;
+import androidx.appcompat.app.AlertDialog;
+
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.app_dictionary_ev.DatabaseHelper;
@@ -91,17 +95,26 @@ public class SettingsActivity extends AppCompatActivity {
         builder.show();
     }
     public void onRestoreDatabaseClick(View view) {
-        // Xóa dữ liệu từ bảng yêu cầu
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        SQLiteDatabase historyDb = historyDatabaseHelper.getWritableDatabase(); // Dùng đối tượng historyDatabaseHelper
+        // Tạo dialog xác nhận
+        new AlertDialog.Builder(this)
+                .setTitle("Xác nhận")
+                .setMessage("Bạn có chắc chắn muốn khôi phục dữ liệu? Tất cả dữ liệu sẽ bị xóa.")
+                .setPositiveButton("Xác Nhận", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Nếu chọn "Có", thực hiện xóa dữ liệu
+                        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+                        SQLiteDatabase historyDb = historyDatabaseHelper.getWritableDatabase();
 
-        // Giả sử bạn có các bảng như favorites và history
-        db.delete(DatabaseHelper.TABLE_FAVORITES, null, null);  // Xóa dữ liệu trong bảng favorites
-        db.delete(DatabaseHelper.TABLE_TRANSLATION_HISTORY, null, null);
-        historyDb.delete(HistoryDatabaseHelper.TABLE_HISTORY, null, null);  // Xóa dữ liệu trong bảng history
+                        db.delete(DatabaseHelper.TABLE_FAVORITES, null, null);
+                        db.delete(DatabaseHelper.TABLE_TRANSLATION_HISTORY, null, null);
+                        historyDb.delete(HistoryDatabaseHelper.TABLE_HISTORY, null, null);
 
-        // Thông báo người dùng đã xóa thành công
-        Toast.makeText(this, "Dữ liệu đã được khôi phục!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Dữ liệu đã được khôi phục!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Hủy", null) // Nếu chọn "Không", đóng dialog
+                .show();
     }
 
 }
