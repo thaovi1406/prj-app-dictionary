@@ -28,30 +28,32 @@
 
 
 
-    <LinearLayout
-        android:id="@+id/homeLayout"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:padding="40dp">
+        android:padding="20dp">
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Xóa"
+            android:background="@drawable/button_background"
+            android:backgroundTint="@null"
+            android:foreground="@null"
+            android:visibility="gone"
+            android:layout_centerHorizontal="true"/>
 
         <include
+            android:id="@+id/btnHome"
             layout="@layout/button_home"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-    <Button
-        android:id="@+id/deleteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Xóa"
-        android:background="@drawable/button_background"
-        android:backgroundTint="@null"
-        android:foreground="@null"
-        android:visibility="gone"
-        android:layout_above="@id/homeLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"/>
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"/>
+
+    </RelativeLayout>
+
+
 
 </RelativeLayout>

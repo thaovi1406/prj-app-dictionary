@@ -86,6 +86,9 @@ public class ResultActivity extends AppCompatActivity {
 
         textToSpeech = new TextToSpeech(this, status -> {
             if (status == TextToSpeech.SUCCESS) {
+                float speed = prefs.getFloat("speed", 1.0f);
+                textToSpeech.setSpeechRate(speed);
+
                 textToSpeech.setLanguage(Locale.US);
                 if (isAutoPlayEnabled && word != null) {
                     speakWord(word);

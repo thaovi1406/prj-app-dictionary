@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.List;
+
 public class HistoryDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "FavoriteWords.db";
@@ -66,4 +68,23 @@ public class HistoryDatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_HISTORY, null, null);
         db.close();
     }
+    public int deleteWordsFromHistory(List<String> words) {
+        if (words == null || words.isEmpty()) return 0;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        StringBuilder placeholders = new StringBuilder();
+        for (int i = 0; i < words.size(); i++) {
+            placeholders.append("?");
+            if (i < words.size() - 1) placeholders.append(",");
+        }
+
+        String whereClause = "word IN (" + placeholders + ")";
+        String[] whereArgs = words.toArray(new String[0]);
+
+        int deletedRows = db.delete(TABLE_HISTORY, whereClause, whereArgs);
+        db.close();
+        return deletedRows;
+    }
+
 }

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +40,8 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabAdapter.ViewHolder> 
             if (status == TextToSpeech.SUCCESS) {
                 int langResult = textToSpeech.setLanguage(Locale.getDefault());
                 if (langResult == TextToSpeech.LANG_MISSING_DATA || langResult == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    Log.e("VocabAdapter", "TTS: Ngôn ngữ không được hỗ trợ hoặc thiếu dữ liệu");
+                    Toast.makeText(context, "Ngôn ngữ Text-to-Speech không được hỗ trợ", Toast.LENGTH_SHORT).show();
                 } else {
                     isTtsInitialized = true;
                 }
@@ -65,6 +68,9 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabAdapter.ViewHolder> 
         holder.pos.setText(item.getPos());
         holder.meaning.setText(item.getFirstMeaning());
 
+        holder.checkBox.setChecked(item.isSelected());
+
+        // Màu nền xen kẽ sử dụng tài nguyên
         int backgroundColor = position % 2 == 0
                 ? ContextCompat.getColor(context, R.color.light_blue)
                 : ContextCompat.getColor(context, R.color.white);
@@ -92,6 +98,7 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabAdapter.ViewHolder> 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView word, pronounce, pos, meaning;
         ImageButton btnAudio;
+        CheckBox checkBox;
 
         public ViewHolder(@NonNull View itemView, VocabAdapter adapter) {
             super(itemView);
@@ -100,6 +107,7 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabAdapter.ViewHolder> 
             pos = itemView.findViewById(R.id.tvPos);
             meaning = itemView.findViewById(R.id.tvMeaning);
             btnAudio = itemView.findViewById(R.id.btnAudio);
+            checkBox = itemView.findViewById(R.id.checkBox);
 
             btnAudio.setContentDescription("Phát âm từ");
 
@@ -134,6 +142,29 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabAdapter.ViewHolder> 
 
                 itemView.getContext().startActivity(intent);
             });
+            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                int pos = getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION) {
+                    adapter.items.get(pos).setSelected(isChecked);
+                    adapter.onSelectionChanged();  // Hàm callback sẽ được định nghĩa ở adapter
+                }
+            });
+        }
+    }
+
+    public interface SelectionChangeListener {
+        void onSelectionChanged();
+    }
+
+    private SelectionChangeListener selectionChangeListener;
+
+    public void setSelectionChangeListener(SelectionChangeListener listener) {
+        this.selectionChangeListener = listener;
+    }
+
+    public void onSelectionChanged() {
+        if (selectionChangeListener != null) {
+            selectionChangeListener.onSelectionChanged();
         }
     }
 }
