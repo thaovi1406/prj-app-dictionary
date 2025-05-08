@@ -177,29 +177,7 @@ public boolean addFavoriteWord(String word, String pronunciation, String type, S
                 meaningBuilder.toString().trim()
         );
     }
-    public VocabModel getWordDetails(String word) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        VocabModel model = null;
 
-        Cursor cursor = db.rawQuery("SELECT * FROM words WHERE word = ?", new String[]{word});
-        if (cursor.moveToFirst()) {
-            try {
-                String pronunciation = cursor.getString(cursor.getColumnIndexOrThrow("pronunciation"));
-                String pos = cursor.getString(cursor.getColumnIndexOrThrow("pos"));
-                String meaningsJson = cursor.getString(cursor.getColumnIndexOrThrow("meanings"));
-
-                Gson gson = new Gson();
-                Type type = new TypeToken<List<Meaning>>() {}.getType();
-                List<Meaning> meanings = gson.fromJson(meaningsJson, type);
-
-                model = new VocabModel(word, pronunciation, pos, meanings);
-            } catch (IllegalArgumentException e) {
-                Log.e("DB_ERROR", "Column missing: " + e.getMessage());
-            }
-        }
-        cursor.close();
-        return model;
-    }
 
 
 
