@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -66,6 +68,8 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabAdapter.ViewHolder> 
         holder.pos.setText(item.getPos());
         holder.meaning.setText(item.getFirstMeaning());
 
+        holder.checkBox.setChecked(item.isSelected());
+
         // Màu nền xen kẽ sử dụng tài nguyên
         int backgroundColor = position % 2 == 0
                 ? ContextCompat.getColor(context, R.color.light_blue)
@@ -94,6 +98,7 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabAdapter.ViewHolder> 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView word, pronounce, pos, meaning;
         ImageButton btnAudio;
+        CheckBox checkBox;
 
         public ViewHolder(@NonNull View itemView, VocabAdapter adapter) {
             super(itemView);
@@ -102,6 +107,7 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabAdapter.ViewHolder> 
             pos = itemView.findViewById(R.id.tvPos);
             meaning = itemView.findViewById(R.id.tvMeaning);
             btnAudio = itemView.findViewById(R.id.btnAudio);
+            checkBox = itemView.findViewById(R.id.checkBox);
 
             btnAudio.setContentDescription("Phát âm từ");
 
@@ -121,12 +127,44 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabAdapter.ViewHolder> 
             itemView.setOnClickListener(v -> {
                 VocabModel item = adapter.items.get(getAdapterPosition());
                 Intent intent = new Intent(itemView.getContext(), ResultActivity.class);
+
+                intent.putExtra("word", item.getWord());
+                intent.putExtra("pronunciation", item.getPronunciation());
+                intent.putExtra("pos", item.getPos());
+
+                List<Meaning> meanings = item.getMeanings();
                 Gson gson = new Gson();
-                String vocabJson = gson.toJson(item);
-                Log.d("VocabAdapter", "Sending vocabJson: " + vocabJson); // Gỡ lỗi
-                intent.putExtra("vocab", vocabJson);
+                String meaningsJson = gson.toJson(meanings != null ? meanings : new ArrayList<Meaning>());
+                intent.putExtra("meanings", meaningsJson);
+
+                Log.d("VocabAdapter", "Sending data: word=" + item.getWord() + ", pronunciation=" + item.getPronunciation() +
+                        ", pos=" + item.getPos() + ", meanings=" + meaningsJson);
+
                 itemView.getContext().startActivity(intent);
             });
+            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                int pos = getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION) {
+                    adapter.items.get(pos).setSelected(isChecked);
+                    adapter.onSelectionChanged();  // Hàm callback sẽ được định nghĩa ở adapter
+                }
+            });
+        }
+    }
+
+    public interface SelectionChangeListener {
+        void onSelectionChanged();
+    }
+
+    private SelectionChangeListener selectionChangeListener;
+
+    public void setSelectionChangeListener(SelectionChangeListener listener) {
+        this.selectionChangeListener = listener;
+    }
+
+    public void onSelectionChanged() {
+        if (selectionChangeListener != null) {
+            selectionChangeListener.onSelectionChanged();
         }
     }
 }
