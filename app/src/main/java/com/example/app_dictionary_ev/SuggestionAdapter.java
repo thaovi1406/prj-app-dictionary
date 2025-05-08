@@ -80,16 +80,27 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
                 listener.onSuggestionClick(entry);
             }
         });
+        // Set icon trái tim theo trạng thái yêu thích
+        DatabaseHelper dbHelper = new DatabaseHelper(holder.itemView.getContext());
+        boolean isFavorite = dbHelper.isFavorite(entry.word);
+        holder.ivHeart.setImageResource(isFavorite ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
+
         // Xử lý sự kiện click cho ivHeart
         holder.ivHeart.setOnClickListener(v -> {
-            DatabaseHelper dbHelper = new DatabaseHelper(holder.itemView.getContext());
-            boolean success = dbHelper.addToFavorites(entry);
-            if (success) {
-                Toast.makeText(holder.itemView.getContext(), "Đã thêm vào yêu thích", Toast.LENGTH_SHORT).show();
+            DatabaseHelper dbHelper1 = new DatabaseHelper(holder.itemView.getContext());
+            boolean currentlyFavorite = dbHelper1.isFavorite(entry.word);
+
+            if (currentlyFavorite) {
+                dbHelper1.removeFromFavorites(entry.word);
+                holder.ivHeart.setImageResource(R.drawable.ic_heart);
+                Toast.makeText(holder.itemView.getContext(), "Đã bỏ khỏi yêu thích", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(holder.itemView.getContext(), "Từ đã có trong yêu thích", Toast.LENGTH_SHORT).show();
+                dbHelper1.addToFavorites(entry);
+                holder.ivHeart.setImageResource(R.drawable.ic_heart_filled);
+                Toast.makeText(holder.itemView.getContext(), "Đã thêm vào yêu thích", Toast.LENGTH_SHORT).show();
             }
         });
+
 
     }
 
