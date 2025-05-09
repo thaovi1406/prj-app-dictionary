@@ -15,10 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.app_dictionary_ev.data.db.AppDatabase;
 import com.example.app_dictionary_ev.data.model.DictionaryEntry;
+import com.example.app_dictionary_ev.HistoryDatabaseHelper;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 
 public class SearchHelper {
     private final Context context;
@@ -80,6 +82,21 @@ public class SearchHelper {
             if (wordSelectedListener != null) {
                 wordSelectedListener.onWordSelected(entry);
             }
+
+            // ✅ Thêm vào database lịch sử
+            String word = entry.word;
+            String pronounce = entry.pronunciation;
+            String pos = entry.pos;
+
+            // Lấy nghĩa đầu tiên nếu có
+            String meaning = "";
+            if (entry.meanings != null && !entry.meanings.isEmpty()) {
+                meaning = entry.meanings.get(0).definition;  // hoặc nối tất cả lại
+            }
+
+            HistoryDatabaseHelper dbHelper = new HistoryDatabaseHelper(context);
+            dbHelper.addHistoryWord(word, pronounce, pos, meaning);
+
             rvSuggestions.setVisibility(View.GONE);
         });
 

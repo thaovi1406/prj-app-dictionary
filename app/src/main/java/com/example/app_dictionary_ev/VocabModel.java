@@ -7,6 +7,7 @@ public class VocabModel {
     private String pronunciation;
     private String pos;
     private List<Meaning> meanings;
+    private boolean isSelected = false;
 
     public String getWord() {
         return word;
@@ -45,11 +46,19 @@ public class VocabModel {
         }
         return "";
     }
+    public boolean isSelected() {
+        return isSelected;
+    }
 
-    public String getAllMeanings() {
-        if (meanings != null && !meanings.isEmpty()) {
-            return meanings.get(0).getDefinition();
-        }
-        return "";
+    public void setSelected(boolean selected) {
+        this.isSelected = selected;
+    }
+    public VocabModel() {}
+    public VocabModel(String word, String pronunciation, String pos, List<Meaning> meanings) {
+        this.word = word;
+        this.pronunciation = pronunciation;
+        this.pos = pos;
+        this.meanings = meanings;
+        this.isSelected = false;
     }
 }

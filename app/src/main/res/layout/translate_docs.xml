@@ -57,6 +57,7 @@
                         android:textStyle="bold" />
 
                     <ImageButton
+                        android:id="@+id/buttonSpeakVN"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:padding="7dp"
@@ -169,6 +170,7 @@
                         android:textStyle="bold" />
 
                     <ImageButton
+                        android:id="@+id/buttonSpeakEN"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:padding="7dp"

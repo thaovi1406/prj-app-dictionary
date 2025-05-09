@@ -24,6 +24,8 @@ public class DictionaryEntry {
         public String example;
         public String note;
     }
+
 }
+
 
 // Converter để lưu List<Meaning> dưới dạng JSON

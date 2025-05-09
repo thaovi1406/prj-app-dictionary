@@ -1,65 +1,3 @@
-//package com.example.app_dictionary_ev;
-//
-//import android.content.Intent;
-//import android.database.Cursor;
-//import android.database.sqlite.SQLiteDatabase;
-//import android.os.Bundle;
-//import android.widget.ImageButton;
-//
-//import androidx.appcompat.app.AppCompatActivity;
-//import androidx.recyclerview.widget.DividerItemDecoration;
-//import androidx.recyclerview.widget.LinearLayoutManager;
-//import androidx.recyclerview.widget.RecyclerView;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//public class FavoriteActivity extends AppCompatActivity {
-//    private DatabaseHelper dbHelper;
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        dbHelper = new DatabaseHelper(this);
-//        setContentView(R.layout.history_activity);
-//
-//        CustomHeader customHeader = findViewById(R.id.customHeader);
-//        customHeader.setTitle("Yêu thích");
-//
-//        RecyclerView recyclerView = findViewById(R.id.rvVocab);
-//
-//        List<VocabHisModal> favoriteItems = getFavoriteWords();
-//
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-//        recyclerView.setAdapter(new VocabAdapter(this, favoriteItems));
-//
-//
-//        ImageButton btnBack = findViewById(R.id.btnHome);
-//        btnBack.setOnClickListener(v -> {
-//            Intent intent = new Intent(FavoriteActivity.this, MainActivity.class);
-//            startActivity(intent);
-//            finish();
-//        });
-//    }
-//    private List<VocabHisModal> getFavoriteWords() {
-//        List<VocabHisModal> favoriteItems = new ArrayList<>();
-//        SQLiteDatabase db = dbHelper.getReadableDatabase();
-//        Cursor cursor = db.query("favorites", new String[]{"word", "pronunciation", "type", "meaning"},
-//                null, null, null, null, null);
-//
-//        while (cursor.moveToNext()) {
-//            String word = cursor.getString(cursor.getColumnIndexOrThrow("word"));
-//            String pronunciation = cursor.getString(cursor.getColumnIndexOrThrow("pronunciation"));
-//            String type = cursor.getString(cursor.getColumnIndexOrThrow("type"));
-//            String meaning = cursor.getString(cursor.getColumnIndexOrThrow("meaning"));
-//            favoriteItems.add(new VocabHisModal(word, pronunciation, type, meaning));
-//        }
-//
-//        cursor.close();
-//        db.close();
-//        return favoriteItems;
-//    }
-//}
 package com.example.app_dictionary_ev;
 
 import android.content.Intent;
@@ -72,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -80,16 +19,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class FavoriteActivity extends AppCompatActivity implements VocabAdapter.OnItemCheckListener{
+public class FavoriteActivity extends AppCompatActivity {
     private DatabaseHelper dbHelper;
     private EditText searchText;
     private ImageButton buttonClear;
     private RecyclerView recyclerView;
     private VocabAdapter adapter;
-    private List<VocabHisModal> allFavorites;
-    private List<VocabHisModal> filteredList;
+    private List<VocabModel> allFavorites;
+    private List<VocabModel> filteredList;
     private Button deleteButton;
 
     @Override
@@ -98,39 +40,30 @@ public class FavoriteActivity extends AppCompatActivity implements VocabAdapter.
         setContentView(R.layout.favourite_activity);
 
         dbHelper = new DatabaseHelper(this);
-
         CustomHeader customHeader = findViewById(R.id.customHeader);
         customHeader.setTitle("Yêu thích");
 
-        deleteButton = findViewById(R.id.deleteButton);
         searchText = findViewById(R.id.searchText);
         buttonClear = findViewById(R.id.buttonClear);
         recyclerView = findViewById(R.id.rvVocab);
-
-        // Initially hide the delete button
+        deleteButton = findViewById(R.id.deleteButton);
         deleteButton.setVisibility(View.GONE);
 
-        // Lấy toàn bộ từ yêu thích
         allFavorites = getFavoriteWords();
+
         filteredList = new ArrayList<>(allFavorites);
 
-        // Khởi tạo adapter với danh sách đã lọc
         adapter = new VocabAdapter(this, filteredList);
-        adapter.setOnItemCheckListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
 
-        // Set up delete button
-        deleteButton.setOnClickListener(v -> showDeleteConfirmationDialog());
-
-        // Lọc khi người dùng nhập tìm kiếm
         searchText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String query = s.toString().toLowerCase().trim();
                 filteredList.clear();
-                for (VocabHisModal item : allFavorites) {
+                for (VocabModel item : allFavorites) {
                     if (item.getWord().toLowerCase().contains(query)) {
                         filteredList.add(item);
                     }
@@ -138,69 +71,74 @@ public class FavoriteActivity extends AppCompatActivity implements VocabAdapter.
                 adapter.notifyDataSetChanged();
             }
 
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void afterTextChanged(Editable s) {}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {}
         });
 
-        // Nút xoá ô tìm kiếm
-        buttonClear.setOnClickListener(v -> searchText.setText(""));
+        buttonClear.setOnClickListener(v -> {
+            searchText.setText("");
+            filteredList.clear();
+            filteredList.addAll(allFavorites);
+            adapter.notifyDataSetChanged();
+        });
 
-        // Nút quay về
         ImageButton btnBack = findViewById(R.id.btnHome);
         btnBack.setOnClickListener(v -> {
             Intent intent = new Intent(FavoriteActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         });
+
+        adapter.setSelectionChangeListener(() -> {
+            boolean hasSelection = false;
+            for (VocabModel item : filteredList) {
+                if (item.isSelected()) {
+                    hasSelection = true;
+                    break;
+                }
+            }
+            deleteButton.setVisibility(hasSelection ? View.VISIBLE : View.GONE);
+        });
+        deleteButton.setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("Xác nhận")
+                    .setMessage("Bạn có chắc chắn muốn xóa các từ đã chọn?")
+                    .setPositiveButton("Xóa", (dialog, which) -> {
+                        List<VocabModel> toRemove = new ArrayList<>();
+                        List<String> wordsToDelete = new ArrayList<>();
+
+                        for (VocabModel item : filteredList) {
+                            if (item.isSelected()) {
+                                toRemove.add(item);
+                                wordsToDelete.add(item.getWord());
+                            }
+                        }
+
+                        int deletedCount = dbHelper.removeFavoriteWords(wordsToDelete);
+                        filteredList.removeAll(toRemove);
+                        allFavorites.removeAll(toRemove);
+                        adapter.notifyDataSetChanged();
+                        deleteButton.setVisibility(View.GONE);
+                        Toast.makeText(this, "Đã xóa " + deletedCount + " từ", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("Hủy", (dialog, which) -> {
+                        for (VocabModel item : filteredList) {
+                            item.setSelected(false);
+                        }
+                        adapter.notifyDataSetChanged();
+                        deleteButton.setVisibility(View.GONE);
+                    })
+                    .setCancelable(false)
+                    .show();
+        });
+
     }
-    @Override
-    public void onItemCheck(VocabHisModal item) {
-        // Show delete button when at least one item is selected
-        deleteButton.setVisibility(View.VISIBLE);
-    }
 
-    @Override
-    public void onItemUncheck(VocabHisModal item) {
-        // Hide delete button if no items are selected
-        if (adapter.getSelectedItems().isEmpty()) {
-            deleteButton.setVisibility(View.GONE);
-        }
-    }
-
-    private void showDeleteConfirmationDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Xác nhận xóa")
-                .setMessage("Bạn có chắc chắn muốn xóa các từ đã chọn?")
-                .setPositiveButton("Xóa", (dialog, which) -> {
-                    deleteSelectedItems();
-                    dialog.dismiss();
-                })
-                .setNegativeButton("Hủy", (dialog, which) -> {
-                    adapter.clearSelections();
-                    deleteButton.setVisibility(View.GONE);
-                    dialog.dismiss();
-                })
-                .create()
-                .show();
-    }
-
-    private void deleteSelectedItems() {
-        List<VocabHisModal> selectedItems = adapter.getSelectedItems();
-        dbHelper.deleteMultipleFromFavorites(selectedItems);
-
-        // Remove from all lists
-        allFavorites.removeAll(selectedItems);
-        filteredList.removeAll(selectedItems);
-
-        // Update adapter
-        adapter.notifyDataSetChanged();
-
-        // Hide delete button
-        deleteButton.setVisibility(View.GONE);
-    }
-    // Truy vấn lấy danh sách từ yêu thích từ SQLite
-    private List<VocabHisModal> getFavoriteWords() {
-        List<VocabHisModal> favoriteItems = new ArrayList<>();
+    private List<VocabModel> getFavoriteWords() {
+        List<VocabModel> favoriteItems = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.query("favorites", new String[]{"word", "pronunciation", "type", "meaning"},
                 null, null, null, null, null);
@@ -210,11 +148,52 @@ public class FavoriteActivity extends AppCompatActivity implements VocabAdapter.
             String pronunciation = cursor.getString(cursor.getColumnIndexOrThrow("pronunciation"));
             String type = cursor.getString(cursor.getColumnIndexOrThrow("type"));
             String meaning = cursor.getString(cursor.getColumnIndexOrThrow("meaning"));
-            favoriteItems.add(new VocabHisModal(word, pronunciation, type, meaning));
+
+            List<Meaning> meanings = new ArrayList<>();
+            if (meaning != null && !meaning.isEmpty()) {
+                String[] meaningLines = meaning.split("\n");
+                Meaning currentMeaning = null;
+                for (String line : meaningLines) {
+                    line = line.trim();
+                    if (line.startsWith("➜")) {
+                        if (currentMeaning != null) {
+                            meanings.add(currentMeaning);
+                        }
+                        currentMeaning = new Meaning();
+                        currentMeaning.setDefinition(line.replace("➜ ", ""));
+                    } else if (currentMeaning != null) {
+                        Pattern pattern = Pattern.compile("(.*?)(?:\\((.*?)\\))?$");
+                        Matcher matcher = pattern.matcher(line);
+                        if (matcher.find()) {
+                            String examplePart = matcher.group(1) != null ? matcher.group(1).trim() : "";
+                            String notePart = matcher.group(2);
+                            if (currentMeaning.getExample() == null || currentMeaning.getExample().isEmpty()) {
+                                currentMeaning.setExample(examplePart);
+                                currentMeaning.setNote(notePart);
+                            }
+                        } else if (currentMeaning.getExample() == null || currentMeaning.getExample().isEmpty()) {
+                            currentMeaning.setExample(line);
+                        } else {
+                            currentMeaning.setNote(line);
+                        }
+                    }
+                }
+                if (currentMeaning != null) {
+                    meanings.add(currentMeaning);
+                }
+            }
+
+            VocabModel vocab = new VocabModel();
+            vocab.setWord(word);
+            vocab.setPronunciation(pronunciation);
+            vocab.setPos(type);
+            vocab.setMeanings(meanings.isEmpty() ? null : meanings);
+            favoriteItems.add(vocab);
         }
 
         cursor.close();
         db.close();
+        Collections.reverse(favoriteItems);
         return favoriteItems;
     }
 }
