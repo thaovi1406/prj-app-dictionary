@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.translate)
     implementation(libs.firebaseFirestore)
     implementation(libs.room.common.jvm)
+    implementation(libs.gridlayout)
     testImplementation(libs.junit)
     implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
     implementation("com.google.firebase:firebase-analytics")
