@@ -18,9 +18,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
         android:layout_below="@+id/customHeader"
         android:id="@+id/mainContent">
 
@@ -47,9 +44,6 @@
                 android:text="[ə'tenʃn]"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"/>
-
-
-
         </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -108,9 +102,6 @@
             android:layout_height="wrap_content"
             />
     </LinearLayout>
-
-
-
 
 
 </RelativeLayout>
