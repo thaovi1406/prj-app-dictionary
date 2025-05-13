@@ -42,7 +42,6 @@ public class SearchHelper {
         this.context = context;
         this.db = AppDatabase.getDatabase(context);
 
-        // Ánh xạ view
         searchText = rootView.findViewById(R.id.searchText);
         rvSuggestions = rootView.findViewById(R.id.rvSuggestions);
         buttonClear = rootView.findViewById(R.id.buttonClear);

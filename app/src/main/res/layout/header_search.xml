@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="90dp"
-        android:background="@color/blue"
+        android:background="#0463BF"
         android:paddingTop="25dp">
         <EditText
             android:layout_width="0dp"

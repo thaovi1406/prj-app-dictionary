@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,7 +28,6 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabAdapter.ViewHolder> 
     private final List<VocabModel> items;
     private TextToSpeech textToSpeech;
     private boolean isTtsInitialized = false;
-    private boolean isSelected;
 
     public VocabAdapter(Context context, List<VocabModel> items) {
         this.context = context;
@@ -43,9 +43,6 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabAdapter.ViewHolder> 
                     Log.e("VocabAdapter", "TTS: Ngôn ngữ không được hỗ trợ hoặc thiếu dữ liệu");
                     Toast.makeText(context, "Ngôn ngữ Text-to-Speech không được hỗ trợ", Toast.LENGTH_SHORT).show();
                 } else {
-                    float speed = context.getSharedPreferences("Settings", Context.MODE_PRIVATE)
-                            .getFloat("speed", 1.0f);
-                    textToSpeech.setSpeechRate(speed);
                     isTtsInitialized = true;
                 }
             } else {
@@ -130,10 +127,19 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabAdapter.ViewHolder> 
             itemView.setOnClickListener(v -> {
                 VocabModel item = adapter.items.get(getAdapterPosition());
                 Intent intent = new Intent(itemView.getContext(), ResultActivity.class);
+
+                intent.putExtra("word", item.getWord());
+                intent.putExtra("pronunciation", item.getPronunciation());
+                intent.putExtra("pos", item.getPos());
+
+                List<Meaning> meanings = item.getMeanings();
                 Gson gson = new Gson();
-                String vocabJson = gson.toJson(item);
-                Log.d("VocabAdapter", "Sending vocabJson: " + vocabJson); // Gỡ lỗi
-                intent.putExtra("vocab", vocabJson);
+                String meaningsJson = gson.toJson(meanings != null ? meanings : new ArrayList<Meaning>());
+                intent.putExtra("meanings", meaningsJson);
+
+                Log.d("VocabAdapter", "Sending data: word=" + item.getWord() + ", pronunciation=" + item.getPronunciation() +
+                        ", pos=" + item.getPos() + ", meanings=" + meaningsJson);
+
                 itemView.getContext().startActivity(intent);
             });
             checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {

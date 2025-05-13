@@ -25,6 +25,7 @@ import com.google.mlkit.nl.translate.Translator;
 import com.google.mlkit.nl.translate.TranslatorOptions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -241,6 +242,7 @@ public class TranslateTextActivity extends AppCompatActivity {
             }
             cursor.close();
         }
+        Collections.reverse(historyList);
         adapter.notifyDataSetChanged();
     }
     @Override
