@@ -1,5 +1,6 @@
 package com.example.app_dictionary_ev;
 
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -121,6 +122,7 @@ public class TranslateTextActivity extends AppCompatActivity {
                 if (langResult == TextToSpeech.LANG_MISSING_DATA || langResult == TextToSpeech.LANG_NOT_SUPPORTED) {
                     Toast.makeText(this, "Ngôn ngữ tiếng Việt không được hỗ trợ", Toast.LENGTH_SHORT).show();
                 }
+                applySpeechRate();
             }
         });
 
@@ -131,6 +133,7 @@ public class TranslateTextActivity extends AppCompatActivity {
                 if (langResult == TextToSpeech.LANG_MISSING_DATA || langResult == TextToSpeech.LANG_NOT_SUPPORTED) {
                     Toast.makeText(this, "Ngôn ngữ tiếng Anh không được hỗ trợ", Toast.LENGTH_SHORT).show();
                 }
+                applySpeechRate();
             }
         });
 
@@ -239,5 +242,20 @@ public class TranslateTextActivity extends AppCompatActivity {
             cursor.close();
         }
         adapter.notifyDataSetChanged();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        applySpeechRate(); // Cập nhật tốc độ nếu người dùng thay đổi trong Settings
+    }
+    private void applySpeechRate() {
+        SharedPreferences prefs = getSharedPreferences("Settings", MODE_PRIVATE);
+        float speechRate = prefs.getFloat("speed", 1.0f);
+        if (textToSpeechVN != null) {
+            textToSpeechVN.setSpeechRate(speechRate);
+        }
+        if (textToSpeechEN != null) {
+            textToSpeechEN.setSpeechRate(speechRate);
+        }
     }
 }
