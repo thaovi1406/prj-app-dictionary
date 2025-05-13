@@ -22,6 +22,7 @@ import java.util.Map;
 public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.SuggestionViewHolder> {
     private List<DictionaryEntry> suggestions = new ArrayList<>();
     private OnSuggestionClickListener listener;
+
     private static final Map<String, String> POS_SHORT_FORM = new HashMap<>();
 
     static {
@@ -103,6 +104,8 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
 
 
     }
+
+
 
     @Override
     public int getItemCount() {
