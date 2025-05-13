@@ -26,6 +26,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_TYPE = "type";
     public static final String COLUMN_MEANING = "meaning";
 
+
+
+
     // Bảng translation_history
     public static final String TABLE_TRANSLATION_HISTORY = "translation_history";
     public static final String COLUMN_HISTORY_ID = "id";
@@ -86,7 +89,6 @@ public boolean addFavoriteWord(String word, String pronunciation, String type, S
         return false; // Không thêm vì đã tồn tại
     }
 
-    // Nếu chưa có thì thêm
     ContentValues values = new ContentValues();
     values.put(COLUMN_WORD, word);
     values.put(COLUMN_PRONUNCIATION, pronunciation);
@@ -149,7 +151,7 @@ public boolean addFavoriteWord(String word, String pronunciation, String type, S
             placeholders.append("?,");
             args[i] = words.get(i);
         }
-        placeholders.setLength(placeholders.length() - 1); // Xóa dấu phẩy cuối
+        placeholders.setLength(placeholders.length() - 1);
 
         String whereClause = COLUMN_WORD + " IN (" + placeholders + ")";
         int rowsDeleted = db.delete(TABLE_FAVORITES, whereClause, args);

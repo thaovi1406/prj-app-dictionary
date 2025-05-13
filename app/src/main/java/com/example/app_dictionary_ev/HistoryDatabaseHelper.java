@@ -10,7 +10,7 @@ import java.util.List;
 
 public class HistoryDatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "FavoriteWords.db";
+    private static final String DATABASE_NAME = "HistoryWords.db";
     private static final int DATABASE_VERSION = 3;
 
     public static final String TABLE_HISTORY = "history";

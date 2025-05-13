@@ -70,7 +70,6 @@ public class ResultActivity extends AppCompatActivity {
             }
         }
 
-        // Thiết lập RecyclerView cho meanings
         if (meanings != null && !meanings.isEmpty()) {
             rvMeanings.setLayoutManager(new LinearLayoutManager(this));
             MeaningAdapter meaningAdapter = new MeaningAdapter(meanings);
@@ -109,7 +108,7 @@ public class ResultActivity extends AppCompatActivity {
         isFavorite = dbHelper.isWordFavorite(word);
         updateHeartIcon();
         iHeart.setOnClickListener(v -> {
-            String type = "(" + tvPos.getText().toString() + ")";
+            String type =tvPos.getText().toString();
             StringBuilder meaningBuilder = new StringBuilder();
             if (meanings != null) {
                 for (Meaning meaning : meanings) {
