@@ -53,5 +53,12 @@ public class VocabModel {
     public void setSelected(boolean selected) {
         this.isSelected = selected;
     }
-
+    public VocabModel() {}
+    public VocabModel(String word, String pronunciation, String pos, List<Meaning> meanings) {
+        this.word = word;
+        this.pronunciation = pronunciation;
+        this.pos = pos;
+        this.meanings = meanings;
+        this.isSelected = false;
+    }
 }

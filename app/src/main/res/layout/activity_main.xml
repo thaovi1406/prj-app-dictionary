@@ -35,7 +35,8 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/headerSearch"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"/>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
@@ -84,7 +85,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Từ đã tra"
+                        android:text="Lịch sử"
                         android:textColor="@color/white"
                         android:textSize="30sp"
                         android:textStyle="bold" />
@@ -93,9 +94,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Xem lại lịch sử từ mà người dùng đã tra"
+                        android:text="Xem lại lịch sử từ đã tra"
                         android:textColor="@android:color/white"
-                        android:textSize="14sp" />
+                        android:textSize="16sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -127,12 +128,12 @@
                         android:layout_gravity="end"
                         android:alpha="0.3"
                         android:layout_marginTop="10dp"
-                        android:layout_marginEnd="-10dp" />
+                        android:layout_marginEnd="-8dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Từ yêu thích"
+                        android:text="Yêu thích"
                         android:textColor="@android:color/white"
                         android:textSize="30sp"
                         android:textStyle="bold" />
@@ -141,9 +142,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Xem danh sách những từ bạn yêu thích"
+                        android:text="Xem danh sách từ yêu thích"
                         android:textColor="@android:color/white"
-                        android:textSize="14sp" />
+                        android:textSize="16sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -191,7 +192,7 @@
                         android:layout_marginTop="4dp"
                         android:text="Dịch nhanh các đoạn văn bản"
                         android:textColor="@android:color/white"
-                        android:textSize="14sp" />
+                        android:textSize="16sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -239,7 +240,7 @@
                         android:layout_marginTop="4dp"
                         android:text="Các tùy chỉnh ứng dụng"
                         android:textColor="@android:color/white"
-                        android:textSize="14sp" />
+                        android:textSize="16sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
