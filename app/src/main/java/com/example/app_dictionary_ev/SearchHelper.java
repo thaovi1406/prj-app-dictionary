@@ -83,19 +83,32 @@ public class SearchHelper {
             }
 
             // ✅ Thêm vào database lịch sử
+            // ✅ Lấy thông tin từ entry
             String word = entry.word;
             String pronounce = entry.pronunciation;
             String pos = entry.pos;
 
-            // Lấy nghĩa đầu tiên nếu có
-            String meaning = "";
-            if (entry.meanings != null && !entry.meanings.isEmpty()) {
-                meaning = entry.meanings.get(0).definition;  // hoặc nối tất cả lại
+            // ✅ Nối toàn bộ nghĩa, ví dụ và ghi chú
+            StringBuilder meaningBuilder = new StringBuilder();
+            if (entry.meanings != null) {
+                for (DictionaryEntry.Meaning meaningObj : entry.meanings) {
+                    meaningBuilder.append("➜ ").append(meaningObj.definition);
+                    if (meaningObj.example != null && !meaningObj.example.isEmpty()) {
+                        meaningBuilder.append("\n\n").append(meaningObj.example);
+                    }
+                    if (meaningObj.note != null && !meaningObj.note.isEmpty()) {
+                        meaningBuilder.append("\n").append(meaningObj.note);
+                    }
+                    meaningBuilder.append("\n");
+                }
             }
+            String meaning = meaningBuilder.toString().trim();
 
+            // ✅ Thêm vào database lịch sử
             HistoryDatabaseHelper dbHelper = new HistoryDatabaseHelper(context);
             dbHelper.addHistoryWord(word, pronounce, pos, meaning);
 
+            // ✅ Ẩn gợi ý sau khi chọn
             rvSuggestions.setVisibility(View.GONE);
         });
 
