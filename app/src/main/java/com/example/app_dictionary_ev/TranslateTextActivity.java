@@ -41,7 +41,7 @@ public class TranslateTextActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TranslationHistoryAdapter adapter;
     private List<TranslationHistoryModel> historyList;
-    private ImageButton buttonSpeakVN, buttonSpeakEN;
+    private ImageButton buttonSpeakTop, buttonSpeakBottom;
     private TextToSpeech textToSpeechVN, textToSpeechEN;
 
     @Override
@@ -60,8 +60,8 @@ public class TranslateTextActivity extends AppCompatActivity {
         title_Enter = findViewById(R.id.tEnter);
         title_Translated = findViewById(R.id.tTranslated);
         button_clear = findViewById(R.id.buttonClear);
-        buttonSpeakVN = findViewById(R.id.buttonSpeakVN);
-        buttonSpeakEN = findViewById(R.id.buttonSpeakEN);
+        buttonSpeakTop = findViewById(R.id.buttonSpeakTop);
+        buttonSpeakBottom = findViewById(R.id.buttonSpeakBottom);
 
         // Khởi tạo RecyclerView
         recyclerView = findViewById(R.id.rvTranslated);
@@ -139,22 +139,34 @@ public class TranslateTextActivity extends AppCompatActivity {
         });
 
         // Bắt sự kiện click nút loa tiếng Việt
-        buttonSpeakVN.setOnClickListener(v -> {
+        buttonSpeakTop.setOnClickListener(v -> {
             String text = edittext_enter_text.getText().toString().trim();
-            if (!text.isEmpty() && textToSpeechVN != null) {
-                textToSpeechVN.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+            if (!text.isEmpty()) {
+                if (isVietnameseToEnglish && textToSpeechVN != null) {
+                    textToSpeechVN.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+                } else if (!isVietnameseToEnglish && textToSpeechEN != null) {
+                    textToSpeechEN.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+                } else {
+                    Toast.makeText(TranslateTextActivity.this, "TTS chưa được khởi tạo", Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Toast.makeText(TranslateTextActivity.this, "Không có văn bản để đọc hoặc TTS chưa được khởi tạo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TranslateTextActivity.this, "Không có văn bản để đọc", Toast.LENGTH_SHORT).show();
             }
         });
 
         // Bắt sự kiện click nút loa tiếng Anh
-        buttonSpeakEN.setOnClickListener(v -> {
+        buttonSpeakBottom.setOnClickListener(v -> {
             String text = textView_translated.getText().toString().trim();
-            if (!text.isEmpty() && textToSpeechEN != null) {
-                textToSpeechEN.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+            if (!text.isEmpty()) {
+                if (isVietnameseToEnglish && textToSpeechEN != null) {
+                    textToSpeechEN.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+                } else if (!isVietnameseToEnglish && textToSpeechVN != null) {
+                    textToSpeechVN.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+                } else {
+                    Toast.makeText(TranslateTextActivity.this, "TTS chưa được khởi tạo", Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Toast.makeText(TranslateTextActivity.this, "Không có văn bản để đọc hoặc TTS chưa được khởi tạo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TranslateTextActivity.this, "Không có văn bản để đọc", Toast.LENGTH_SHORT).show();
             }
         });
     }

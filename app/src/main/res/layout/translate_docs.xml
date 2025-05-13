@@ -57,7 +57,7 @@
                         android:textStyle="bold" />
 
                     <ImageButton
-                        android:id="@+id/buttonSpeakVN"
+                        android:id="@+id/buttonSpeakTop"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:padding="7dp"
@@ -168,7 +168,7 @@
                         android:textStyle="bold" />
 
                     <ImageButton
-                        android:id="@+id/buttonSpeakEN"
+                        android:id="@+id/buttonSpeakBottom"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:padding="7dp"
@@ -189,7 +189,7 @@
 
                     <TextView
                         android:id="@+id/textTranslated"
-                        android:layout_width="369dp"
+                        android:layout_width="0dp"
                         android:layout_height="124dp"
                         android:background="@drawable/bg_editext"
                         android:padding="12dp"
