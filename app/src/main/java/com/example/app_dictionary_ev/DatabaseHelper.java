@@ -179,7 +179,13 @@ public boolean addFavoriteWord(String word, String pronunciation, String type, S
                 meaningBuilder.toString().trim()
         );
     }
+    public boolean isFavorite(String word) {
+        return isWordFavorite(word); // dùng lại hàm có sẵn
+    }
 
+    public boolean removeFromFavorites(String word) {
+        return removeFavoriteWord(word); // dùng lại hàm có sẵn
+    }
 
 
 
