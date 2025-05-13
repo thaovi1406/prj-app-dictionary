@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HistoryActivity extends AppCompatActivity {
 
@@ -142,25 +144,51 @@ public class HistoryActivity extends AppCompatActivity {
             String type = cursor.getString(cursor.getColumnIndexOrThrow("type"));
             String meaning = cursor.getString(cursor.getColumnIndexOrThrow("meaning"));
 
-            // Tạo model chính
+            List<Meaning> meanings = new ArrayList<>();
+            if (meaning != null && !meaning.isEmpty()) {
+                String[] meaningLines = meaning.split("\n");
+                Meaning currentMeaning = null;
+                for (String line : meaningLines) {
+                    line = line.trim();
+                    if (line.startsWith("➜")) {
+                        if (currentMeaning != null) {
+                            meanings.add(currentMeaning);
+                        }
+                        currentMeaning = new Meaning();
+                        currentMeaning.setDefinition(line.replace("➜ ", ""));
+                    } else if (currentMeaning != null) {
+                        Pattern pattern = Pattern.compile("(.*?)(?:\\((.*?)\\))?$");
+                        Matcher matcher = pattern.matcher(line);
+                        if (matcher.find()) {
+                            String examplePart = matcher.group(1) != null ? matcher.group(1).trim() : "";
+                            String notePart = matcher.group(2);
+                            if (currentMeaning.getExample() == null || currentMeaning.getExample().isEmpty()) {
+                                currentMeaning.setExample(examplePart);
+                                currentMeaning.setNote(notePart);
+                            }
+                        } else if (currentMeaning.getExample() == null || currentMeaning.getExample().isEmpty()) {
+                            currentMeaning.setExample(line);
+                        } else {
+                            currentMeaning.setNote(line);
+                        }
+                    }
+                }
+                if (currentMeaning != null) {
+                    meanings.add(currentMeaning);
+                }
+            }
+
             VocabModel vocab = new VocabModel();
             vocab.setWord(word);
             vocab.setPronunciation(pronunciation);
             vocab.setPos(type);
-
-            // Meaning đơn lẻ vì trong lịch sử chỉ lưu 1 nghĩa
-            Meaning m = new Meaning();
-            m.setDefinition(meaning);
-            List<Meaning> meaningList = new ArrayList<>();
-            meaningList.add(m);
-            vocab.setMeanings(meaningList);
-
+            vocab.setMeanings(meanings.isEmpty() ? null : meanings);
             historyItems.add(vocab);
         }
 
         cursor.close();
         db.close();
-        Collections.reverse(historyItems); // Mới nhất lên đầu
+        Collections.reverse(historyItems);
         return historyItems;
     }
 }
