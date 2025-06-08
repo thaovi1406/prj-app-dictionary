@@ -27,12 +27,12 @@ public class VocabAdapter extends RecyclerView.Adapter<VocabAdapter.ViewHolder> 
     private final Context context;
     private final List<VocabModel> items;
     private TextToSpeech textToSpeech;
-    private boolean isTtsInitialized = false;
+    private boolean isTtsInitialized = false; // kiểm tra xem textToSpeech đã sẵn sàng chưa.
 
     public VocabAdapter(Context context, List<VocabModel> items) {
         this.context = context;
         this.items = items;
-        initTextToSpeech();
+        initTextToSpeech(); //Gọi initTextToSpeech() để chuẩn bị phát âm.
     }
 
     private void initTextToSpeech() {

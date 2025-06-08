@@ -17,9 +17,11 @@ public class DictionaryEntry {
     public String pos;
 
     @TypeConverters(MeaningsConverter.class)
+    //Chuyển đổi List<Meaning> thành String để lưu vào database
     public List<Meaning> meanings;
+    //List<Meaning> là danh sách các nghĩa của từ, mỗi nghĩa có thể có nhiều ví dụ và ghi chú khác nhau.
 
-    public static class Meaning {
+    public static class Meaning { //đại diện cho một nghĩa của từ
         public String definition;
         public String example;
         public String note;

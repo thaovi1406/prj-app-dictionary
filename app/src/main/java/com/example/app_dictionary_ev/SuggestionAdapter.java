@@ -84,7 +84,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
         DatabaseHelper dbHelper = new DatabaseHelper(holder.itemView.getContext());
         boolean isFavorite = dbHelper.isFavorite(entry.word);
         holder.ivHeart.setImageResource(isFavorite ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
-
+        //vi
         holder.ivHeart.setOnClickListener(v -> {
             DatabaseHelper dbHelper1 = new DatabaseHelper(holder.itemView.getContext());
             boolean currentlyFavorite = dbHelper1.isFavorite(entry.word);

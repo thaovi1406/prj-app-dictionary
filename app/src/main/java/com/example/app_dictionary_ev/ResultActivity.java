@@ -141,6 +141,8 @@ public class ResultActivity extends AppCompatActivity {
                 speakWord(word);
             }
         });
+        // nhấn vào nút loa (iSpeaker), ứng dụng đọc từ tiếng Anh.
+
     }
 
     private void updateHeartIcon() {
@@ -154,12 +156,15 @@ public class ResultActivity extends AppCompatActivity {
     private void speakWord(String word) {
         if (textToSpeech != null) {
             AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+            //tăng âm lượng
             int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
             audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
 
             HashMap<String, String> params = new HashMap<>();
             params.put(TextToSpeech.Engine.KEY_PARAM_VOLUME, "1.0");
+            //Tạo params với volume = 1.0 (100%).
             textToSpeech.speak(word, TextToSpeech.QUEUE_FLUSH, params);
+            //QUEUE_FLUSH: xóa tất cả các câu đang nói và bắt đầu nói câu mới
         }
     }
 

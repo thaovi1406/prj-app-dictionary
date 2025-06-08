@@ -58,7 +58,7 @@ public class FavoriteActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
 
-        searchText.addTextChangedListener(new TextWatcher() {
+        searchText.addTextChangedListener(new TextWatcher() { //addTextChangedListener là phương thức dùng để theo dõi sự thay đổi của nội dung trong EditText.
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String query = s.toString().toLowerCase().trim();

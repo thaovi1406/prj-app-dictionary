@@ -26,10 +26,10 @@ public class SearchHelper {
     private final Context context;
     private final AppDatabase db;
     private final EditText searchText;
-    private final RecyclerView rvSuggestions;
-    private final ImageButton buttonClear;
-    private final ProgressBar progressBar;
-    private final SuggestionAdapter suggestionAdapter;
+    private final RecyclerView rvSuggestions; // RecyclerView để hiển thị gợi ý
+    private final ImageButton buttonClear; // Nút xóa nhanh nd ở ô tìm kiếm
+    private final ProgressBar progressBar; // ProgressBar để hiển thị trạng thái tải dữ liệu
+    private final SuggestionAdapter suggestionAdapter; //chứa ds từ gợi ý
     private final Handler handler = new Handler();
     private Runnable searchRunnable;
     private OnWordSelectedListener wordSelectedListener;
